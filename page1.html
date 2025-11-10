@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ganesh Dairy - Login</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:"Poppins",sans-serif; }
+    body {
+      height:100vh;
+      background: linear-gradient(135deg,#d4fc79,#96e6a1);
+      display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden;
+    }
+    .header { text-align:center; animation:fadeDown 1.2s ease; z-index:2; }
+    .header h1 { font-size:56px; color:#2e8b57; letter-spacing:2px; margin-bottom:8px; }
+    .header h3 { color:#333; font-weight:500; font-size:18px; margin-bottom:18px; }
+    .info { text-align:center; color:#444; animation:fadeIn 1.6s ease; font-size:15px; margin-bottom:36px; line-height:1.5; z-index:2; }
+    .login-section { text-align:center; animation:fadeUp 1.2s ease; z-index:2; }
+    input[type="text"] {
+      padding:12px 18px; width:280px; border:2px solid #2e8b57; border-radius:30px; outline:none; font-size:15px; transition:0.25s; margin-bottom:10px;
+    }
+    input[type="text"]:focus { box-shadow:0 0 10px rgba(46,139,87,0.45); transform:scale(1.02); }
+    button {
+      margin-top:8px; padding:12px 36px; background:#2e8b57; color:#fff; border:none; border-radius:30px; font-size:15px; cursor:pointer; transition:0.25s;
+    }
+    button:hover { background:#256d46; transform:scale(1.03); }
+    footer { position:absolute; bottom:14px; font-size:13px; color:#333; z-index:2; animation:fadeIn 1.6s ease; }
+    body::before {
+      content:""; position:absolute; inset:0; background:url('https://i.imgur.com/NuhkUuF.png') no-repeat center bottom; background-size:520px; opacity:0.12; z-index:0; animation:float 6s ease-in-out infinite;
+    }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeDown { from{opacity:0;transform:translateY(-30px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    @media (max-width:420px) {
+      .header h1 { font-size:36px; }
+      input[type="text"] { width:220px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>🐄 Ganesh Dairy 🥛</h1>
+    <h3>Fresh • Pure • Healthy Milk Everyday</h3>
+  </div>
+
+  <div class="info">
+    <p><strong>Trade License No:</strong> MH-DAIRY-2025-412</p>
+    <p><strong>Location:</strong> Near Main Market, Shaniwar Peth, Pune</p>
+    <p><strong>Contact:</strong> +91 98765 43210 | ganeshdairy@gmail.com</p>
+  </div>
+
+  <div class="login-section">
+    <input type="text" id="custName" placeholder="Enter Customer Name" required><br>
+    <input type="text" id="custNumber" placeholder="Enter Customer Number" required><br>
+    <button onclick="goToNext()">Login</button>
+  </div>
+
+  <footer>© 2025 Ganesh Dairy. All Rights Reserved.</footer>
+
+  <script>
+    function goToNext() {
+      const name = document.getElementById("custName").value.trim();
+      const number = document.getElementById("custNumber").value.trim();
+
+      if (name === "" || number === "") {
+        alert("Please enter both Name and Customer Number!");
+        return;
+      }
+
+      // Save details
+      localStorage.setItem("customerName", name);
+      localStorage.setItem("customerNumber", number);
+
+      // Redirect to record page
+      window.location.href = "record.html";
+    }
+  </script>
+
+</body>
+</html>

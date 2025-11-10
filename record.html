@@ -88,11 +88,9 @@
       </tr>
     </thead>
     <tbody>
-      <!-- JS adds rows here -->
-    </tbody>
+      </tbody>
   </table>
 
-  <!-- Popup message -->
   <div id="popup" class="popup">✅ Record added successfully!</div>
 
   <script>
@@ -111,11 +109,11 @@
 
     const tableBody = document.querySelector("#recordTable tbody");
     const totalDisplay = document.getElementById("totalDisplay");
-    const popup = document.getElementById("popup");
+    const popup = document.getElementById("popup"); // Get the popup element
 
     function showPopup() {
       popup.classList.add("show");
-      setTimeout(() => popup.classList.remove("show"), 2000);
+      setTimeout(() => popup.classList.remove("show"), 2000); // Hide after 2 seconds
     }
 
     function renderTable() {
@@ -169,7 +167,7 @@
       document.getElementById("price").value = "";
 
       renderTable();
-      showPopup(); // ✅ show success message
+      showPopup(); // Call showPopup() here
     }
 
     function clearRecords() {

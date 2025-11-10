@@ -52,6 +52,13 @@
       transform: translate(-50%, -50%) scale(1);
     }
 
+    .show-total-btn {
+      background:#2980b9;
+      margin-top:12px;
+      width:90%;
+      font-size:16px;
+    }
+
     @keyframes fadeUp { from{opacity:0; transform:translateY(24px)} to{opacity:1; transform:translateY(0)} }
     @keyframes fadeDown { from{opacity:0; transform:translateY(-24px)} to{opacity:1; transform:translateY(0)} }
     @keyframes fadeIn { from{opacity:0} to{opacity:1} }
@@ -76,6 +83,7 @@
       <button onclick="addRecord()">Add Record</button>
       <button onclick="clearRecords()" style="background:#c0392b; margin-left:8px;">Clear All</button>
     </div>
+    <button class="show-total-btn" onclick="showTotal()">Show Total</button>
     <div class="total" id="totalDisplay"></div>
   </div>
 
@@ -91,10 +99,6 @@
     </thead>
     <tbody></tbody>
   </table>
-
-  <div style="margin-top:20px;">
-    <button onclick="showTotal()" style="background:#2980b9;">Show Total</button>
-  </div>
 
   <!-- Popup message -->
   <div id="popup" class="popup">✅ Your record successfully added!</div>
@@ -184,7 +188,6 @@
       renderTable();
     }
 
-    // 🧮 Show Total Button Function
     function showTotal() {
       let totalLitres = 0;
       let totalPrice = 0;

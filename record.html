@@ -10,34 +10,38 @@
       background: linear-gradient(135deg,#a8edea,#fed6e3);
       min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:22px;
     }
-    h1 { color:#2e8b57; margin-top:20px; margin-bottom:8px; animation:fadeDown 1.2s ease; }
+    h1 { color:#1e7b38; margin-top:20px; margin-bottom:8px; animation:fadeDown 1.2s ease; }
     h3 { color:#444; margin-bottom:18px; }
     .form-section {
       background:rgba(255,255,255,0.92); padding:18px 24px; border-radius:12px;
       box-shadow:0 6px 18px rgba(0,0,0,0.08);
       text-align:center; width:380px; animation:fadeIn 1.4s ease;
     }
-    input, button { padding:10px; margin:8px 6px; border-radius:8px; border:1px solid #2e8b57; font-size:15px; }
+    input, button { padding:10px; margin:8px 6px; border-radius:8px; border:1px solid #1e7b38; font-size:15px; }
     input[type="date"] { width:150px; }
     input[type="number"] { width:100px; }
-    button { background:#2e8b57; color:#fff; border:none; cursor:pointer; transition:0.2s; }
-    button:hover { background:#256d46; transform:scale(1.02); }
+    button { background:#1e7b38; color:#fff; border:none; cursor:pointer; transition:0.2s; }
+    button:hover { background:#17642e; transform:scale(1.03); }
     table { width:95%; border-collapse:collapse; margin-top:34px; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.06); animation:fadeUp 1.2s ease; }
-    th, td { padding:12px; text-align:center; border-bottom:1px solid #eee; }
-    th { background:#2e8b57; color:#fff; }
-    tr:hover { background:#fafafa; }
-    .back-btn { position:absolute; left:18px; top:18px; background:#256d46; color:#fff; padding:8px 12px; border-radius:8px; text-decoration:none; font-size:14px; transition:0.2s; }
-    .back-btn:hover { background:#1f5538; }
-    .total { margin-top:14px; font-weight:600; color:#2e8b57; text-align:center; }
+    th, td { padding:12px; text-align:center; border-bottom:1px solid #eee; transition:0.3s; }
+    th { background:#1e7b38; color:#fff; }
+    tr:hover td { background:#f1f8f4; }
+    .back-btn { position:absolute; left:18px; top:18px; background:#17642e; color:#fff; padding:8px 12px; border-radius:8px; text-decoration:none; font-size:14px; transition:0.2s; }
+    .back-btn:hover { background:#0f4c20; }
+    .total { margin-top:14px; font-weight:600; color:#1e7b38; text-align:center; }
+    .download-btn {
+      background:#1e7b38; color:#fff; border:none; border-radius:8px;
+      padding:8px 16px; cursor:pointer; margin-top:10px; transition:0.2s;
+    }
+    .download-btn:hover { background:#17642e; transform:scale(1.02); }
     @keyframes fadeUp { from{opacity:0; transform:translateY(24px)} to{opacity:1; transform:translateY(0)} }
     @keyframes fadeDown { from{opacity:0; transform:translateY(-24px)} to{opacity:1; transform:translateY(0)} }
     @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-    @media (max-width:520px) { .form-section{width:95%} table{width:100%} input{width:80px} }
   </style>
 </head>
 <body>
 
-  <a href="page1.html" class="back-btn">⬅ Back</a>
+  <a href="index.html" class="back-btn">⬅ Back</a>
 
   <h1>Ganesh Dairy 🥛</h1>
   <h3 id="custInfo"></h3>
@@ -52,6 +56,7 @@
     <div style="margin-top:6px;">
       <button onclick="addRecord()">Add Record</button>
       <button onclick="clearRecords()" style="background:#c0392b; margin-left:8px;">Clear All</button>
+      <button class="download-btn" onclick="downloadCSV()">Download CSV</button>
     </div>
     <div class="total" id="totalDisplay"></div>
   </div>
@@ -66,9 +71,7 @@
         <th>Total Price</th>
       </tr>
     </thead>
-    <tbody>
-      <!-- JS adds rows here -->
-    </tbody>
+    <tbody></tbody>
   </table>
 
   <script>
@@ -77,7 +80,7 @@
 
     if (!customerName || !customerNumber) {
       alert("Please login first!");
-      window.location.href = "page1.html";
+      window.location.href = "index.html";
     }
 
     document.getElementById("custInfo").textContent = `Customer: ${customerName} (No: ${customerNumber})`;
@@ -99,14 +102,14 @@
       let totalLitres = 0;
       let totalPrice = 0;
 
-      records.forEach(r => {
+      records.forEach((r, i) => {
         const tr = document.createElement("tr");
         const recordTotal = parseFloat(r.litres) * parseFloat(r.price);
         tr.innerHTML = `
           <td>${r.name}</td>
-          <td>${r.date}</td>
-          <td>${r.litres}</td>
-          <td>₹${r.price}</td>
+          <td contenteditable="true" onblur="updateRecord(${i}, 'date', this.textContent)">${r.date}</td>
+          <td contenteditable="true" onblur="updateRecord(${i}, 'litres', this.textContent)">${r.litres}</td>
+          <td contenteditable="true" onblur="updateRecord(${i}, 'price', this.textContent)">${r.price}</td>
           <td>₹${recordTotal.toFixed(2)}</td>
         `;
         tableBody.appendChild(tr);
@@ -141,12 +144,33 @@
       renderTable();
     }
 
+    function updateRecord(index, field, value) {
+      records[index][field] = value;
+      allRecords[customerNumber] = records;
+      localStorage.setItem("milkRecords", JSON.stringify(allRecords));
+      renderTable();
+    }
+
     function clearRecords() {
       if (!confirm("Clear ALL records for this customer?")) return;
       records = [];
       allRecords[customerNumber] = [];
       localStorage.setItem("milkRecords", JSON.stringify(allRecords));
       renderTable();
+    }
+
+    function downloadCSV() {
+      if (records.length === 0) return alert("No records to download!");
+      let csv = "Name,Date,Litres,Price/Litre,Total Price\n";
+      records.forEach(r => {
+        const total = (r.litres * r.price).toFixed(2);
+        csv += `${r.name},${r.date},${r.litres},${r.price},${total}\n`;
+      });
+      const blob = new Blob([csv], { type: "text/csv" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `${customerName}_Milk_Records.csv`;
+      a.click();
     }
   </script>
 

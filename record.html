@@ -22,14 +22,6 @@
     input[type="number"] { width:100px; }
     button { background:#2e8b57; color:#fff; border:none; cursor:pointer; transition:0.2s; }
     button:hover { background:#256d46; transform:scale(1.02); }
-    /* Added button for Tally Sales */
-    .tally-btn {
-      background: #3498db; /* Blue color for Tally */
-      margin-left:8px;
-    }
-    .tally-btn:hover {
-      background: #2980b9;
-    }
     table { width:95%; border-collapse:collapse; margin-top:34px; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.06); animation:fadeUp 1.2s ease; }
     th, td { padding:12px; text-align:center; border-bottom:1px solid #eee; }
     th { background:#2e8b57; color:#fff; }
@@ -59,51 +51,7 @@
       opacity: 1;
       transform: translate(-50%, -50%) scale(1);
     }
-    
-    /* Tally Modal Styles */
-    .modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        display: none; /* Hidden by default */
-        justify-content: center;
-        align-items: center;
-        z-index: 2000;
-    }
 
-    .modal-content {
-        background: white;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        width: 300px;
-        text-align: center;
-        animation: scaleIn 0.3s ease;
-    }
-    .modal-content h2 {
-        color: #2e8b57;
-        margin-bottom: 20px;
-    }
-    .modal-content p {
-        font-size: 18px;
-        margin: 10px 0;
-        font-weight: 500;
-        color: #444;
-    }
-    .modal-content p strong {
-        color: #c0392b;
-        font-weight: 700;
-    }
-    .modal-content .close-btn {
-        margin-top: 20px;
-        background: #3498db;
-    }
-
-
-    @keyframes scaleIn { from{transform:scale(0.8); opacity:0} to{transform:scale(1); opacity:1} }
     @keyframes fadeUp { from{opacity:0; transform:translateY(24px)} to{opacity:1; transform:translateY(0)} }
     @keyframes fadeDown { from{opacity:0; transform:translateY(-24px)} to{opacity:1; transform:translateY(0)} }
     @keyframes fadeIn { from{opacity:0} to{opacity:1} }
@@ -126,7 +74,7 @@
     </div>
     <div style="margin-top:6px;">
       <button onclick="addRecord()">Add Record</button>
-      <button onclick="showTally()" class="tally-btn">Tally Sales</button> <button onclick="clearRecords()" style="background:#c0392b; margin-left:8px;">Clear All</button>
+      <button onclick="clearRecords()" style="background:#c0392b; margin-left:8px;">Clear All</button>
     </div>
     <div class="total" id="totalDisplay"></div>
   </div>
@@ -144,16 +92,12 @@
     <tbody></tbody>
   </table>
 
-  <div id="popup" class="popup">✅ Your record successfully added!</div>
-  
-  <div id="tallyModal" class="modal-overlay" onclick="closeTally(event)">
-      <div class="modal-content" onclick="event.stopPropagation()">
-          <h2>📊 Total Sales Tally</h2>
-          <p>Total Milk Sold: <strong id="tallyLitres"></strong></p>
-          <p>Total Amount Due: <strong id="tallyPrice"></strong></p>
-          <button onclick="closeTally()" class="close-btn">Close</button>
-      </div>
+  <div style="margin-top:20px;">
+    <button onclick="showTotal()" style="background:#2980b9;">Show Total</button>
   </div>
+
+  <!-- Popup message -->
+  <div id="popup" class="popup">✅ Your record successfully added!</div>
 
   <script>
     const customerName = localStorage.getItem("customerName");
@@ -172,36 +116,23 @@
     const tableBody = document.querySelector("#recordTable tbody");
     const totalDisplay = document.getElementById("totalDisplay");
     const popup = document.getElementById("popup");
-    const tallyModal = document.getElementById("tallyModal");
 
     function showPopup() {
       popup.classList.add("show");
       setTimeout(() => popup.classList.remove("show"), 2000);
     }
 
-    function calculateTotals() {
-        let totalLitres = 0;
-        let totalPrice = 0;
-        
-        records.forEach(r => {
-            const recordTotal = parseFloat(r.litres) * parseFloat(r.price);
-            totalLitres += parseFloat(r.litres) || 0;
-            totalPrice += recordTotal || 0;
-        });
-
-        return { totalLitres, totalPrice };
-    }
-
     function renderTable() {
       tableBody.innerHTML = "";
-      const { totalLitres, totalPrice } = calculateTotals();
-
       if (records.length === 0) {
         tableBody.innerHTML = "<tr><td colspan='5'>No records yet</td></tr>";
         totalDisplay.textContent = "Total Milk: 0 L | Total Due: ₹0";
         return;
       }
-      
+
+      let totalLitres = 0;
+      let totalPrice = 0;
+
       records.forEach(r => {
         const tr = document.createElement("tr");
         const recordTotal = parseFloat(r.litres) * parseFloat(r.price);
@@ -213,6 +144,8 @@
           <td>₹${recordTotal.toFixed(2)}</td>
         `;
         tableBody.appendChild(tr);
+        totalLitres += parseFloat(r.litres) || 0;
+        totalPrice += recordTotal || 0;
       });
 
       totalDisplay.textContent = `Total Milk: ${totalLitres.toFixed(1)} L | Total Due: ₹${totalPrice.toFixed(2)}`;
@@ -240,26 +173,8 @@
       document.getElementById("price").value = "";
 
       renderTable();
-      showPopup(); 
+      showPopup();
     }
-    
-    // NEW TALLY FUNCTIONS
-    function showTally() {
-        const { totalLitres, totalPrice } = calculateTotals();
-        
-        document.getElementById('tallyLitres').textContent = `${totalLitres.toFixed(1)} L`;
-        document.getElementById('tallyPrice').textContent = `₹${totalPrice.toFixed(2)}`;
-        
-        tallyModal.style.display = 'flex'; // Show the modal
-    }
-
-    function closeTally(event) {
-        // Only close if the background overlay is clicked, or the close button is clicked
-        if (!event || event.target.id === 'tallyModal' || event.target.classList.contains('close-btn')) {
-            tallyModal.style.display = 'none';
-        }
-    }
-
 
     function clearRecords() {
       if (!confirm("Clear ALL records for this customer?")) return;
@@ -267,6 +182,17 @@
       allRecords[customerNumber] = [];
       localStorage.setItem("milkRecords", JSON.stringify(allRecords));
       renderTable();
+    }
+
+    // 🧮 Show Total Button Function
+    function showTotal() {
+      let totalLitres = 0;
+      let totalPrice = 0;
+      records.forEach(r => {
+        totalLitres += parseFloat(r.litres) || 0;
+        totalPrice += parseFloat(r.litres) * parseFloat(r.price) || 0;
+      });
+      alert(`Total Milk: ${totalLitres.toFixed(1)} L\nTotal Amount: ₹${totalPrice.toFixed(2)}`);
     }
   </script>
 

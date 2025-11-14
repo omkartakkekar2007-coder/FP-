@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Ganesh Dairy - Customer Login</title>
+    <title>Ganesh Dairy - Shop Setup & Customer Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* CSS Variables for Theming */
@@ -14,7 +14,6 @@
             --text-dark: #333333;
             --text-light: #ffffff;
             --error-color: #d9534f;
-            /* Gradient is now used as a color overlay */
             --gradient-start: #c1fba4; 
             --gradient-end: #a7e9af;
             --font-main: 'Poppins', sans-serif;
@@ -24,46 +23,111 @@
         /* Base Reset & Styling */
         * { margin:0; padding:0; box-sizing:border-box; }
 
-        /* --- UPDATED BACKGROUND IMAGE CONTAINER (Using the direct, enhanced image URL) --- */
         .background-image {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            /* Setting the high-quality image URL from our previous exchange */
             background-image: url('https://github.com/omkartakkekar2007-coder/FP-/blob/main/Gemini_Generated_Image_wyx09awyx09awyx0.png/0'); 
             background-size: cover;
             background-position: center;
-            /* Darken and colorize the image for better contrast with the form */
             background-color: var(--gradient-end); 
-            background-blend-mode: multiply; /* Mixes the background-color with the image */
-            opacity: 0.85; /* Adjust opacity of the image/overlay */
-            z-index: -1; /* Keep it behind the content */
+            background-blend-mode: multiply;
+            opacity: 0.85;
+            z-index: -1;
         }
         
         body {
             height:100vh;
-            /* Keeps a subtle fallback/color */
             background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%); 
-            display:grid; /* Use Grid for perfect centering */
+            display:grid;
             place-items:center;
             font-family: var(--font-main);
             color: var(--text-dark);
             overflow:hidden;
         }
 
+        /* --- NEW: Profile Circle and Menu --- */
+        .profile-circle {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            color: var(--text-light);
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s;
+            z-index: 100;
+            user-select: none;
+            display: none; /* Initially hidden until registration is complete */
+        }
+        .profile-circle:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .profile-menu {
+            position: absolute;
+            top: 60px; /* Position below the circle */
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            width: 200px;
+            display: none; /* Initially hidden */
+            padding: 10px 0;
+            text-align: left;
+        }
+        .profile-menu.open {
+            display: block;
+        }
+
+        .menu-shop-info {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 5px;
+        }
+        .menu-shop-info strong {
+            display: block;
+            font-size: 1.05rem;
+            color: var(--primary-dark);
+            margin-bottom: 3px;
+            font-weight: 600;
+        }
+
+        .menu-item {
+            padding: 10px 15px;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .menu-item:hover {
+            background-color: var(--secondary-color);
+        }
+        /* --- END: Profile Circle and Menu --- */
+
         /* Header Styling */
         .header {
             text-align:center;
             margin-bottom: 30px;
             animation: fadeDown 1.2s ease-out;
-            z-index: 1; /* Ensure header is above the background */
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); /* Slight shadow for readability over image */
+            z-index: 1;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
         }
         .header h1 {
-            font-size: clamp(3rem, 7vw, 4.5rem); /* Responsive font size */
-            color: var(--primary-dark); /* Changed color slightly for better contrast */
+            font-size: clamp(3rem, 7vw, 4.5rem);
+            color: var(--primary-dark);
             letter-spacing: 1px;
             margin-bottom: 4px;
             font-family: var(--font-title);
@@ -75,22 +139,32 @@
             font-size: 1rem;
         }
 
-        /* Login Card Styling (Glass Morphism Look) */
-        .login-section {
-            background: rgba(255, 255, 255, 0.85); /* Increased opacity for readability */
-            backdrop-filter: blur(10px); /* Glass effect */
+        /* Form Card Styling (Applied to both forms) */
+        .form-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.4); /* Stronger border for separation */
+            border: 1px solid rgba(255, 255, 255, 0.4);
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             text-align:center;
             max-width: 380px;
             width: 90%;
             animation: fadeUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            z-index: 1; /* Ensure form is above the background */
+            z-index: 1;
+            /* Added for form-switching animation */
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; 
         }
-        
+
+        /* New: Registration Card */
+        #registrationForm h2 {
+            font-family: var(--font-title);
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 25px;
+        }
+
         /* Input Field Styling */
         .input-group {
             margin-bottom: 18px;
@@ -110,8 +184,13 @@
             box-shadow: 0 0 15px rgba(30, 123, 56, 0.4); 
             transform: scale(1.01); 
         }
+        /* New: Input error state */
+        .input-error {
+            border-color: var(--error-color) !important;
+            box-shadow: 0 0 10px rgba(217, 83, 79, 0.6);
+        }
 
-        /* Button Styling (No changes needed) */
+        /* Button Styling */
         button {
             margin-top: 10px;
             padding: 14px 50px;
@@ -134,7 +213,7 @@
             transform: scale(0.98);
         }
         
-        /* Error Message Styling (No changes needed) */
+        /* Error Message Styling */
         .error {
             color: var(--error-color);
             background-color: #f8d7da;
@@ -154,13 +233,13 @@
             bottom:20px; 
             font-size:0.85rem; 
             color:var(--text-dark); 
-            opacity: 0.9; /* Slightly higher opacity for visibility */
+            opacity: 0.9;
             animation: fadeIn 1.6s ease; 
-            z-index: 1; /* Ensure footer is above the background */
+            z-index: 1;
             text-shadow: 0.5px 0.5px 1px rgba(255, 255, 255, 0.5);
         }
 
-        /* Keyframe Animations (No changes needed) */
+        /* Keyframe Animations */
         @keyframes fadeUp { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:translateY(0)} }
         @keyframes fadeDown { from{opacity:0;transform:translateY(-40px)} to{opacity:1;transform:translateY(0)} }
         @keyframes fadeIn { from{opacity:0} to{opacity:1} }
@@ -170,12 +249,36 @@
 <body>
     <div class="background-image"></div> 
 
+    <div class="profile-circle" id="profileCircle">
+        <span id="profileInitial">G</span>
+        <div class="profile-menu" id="profileMenu">
+            <div class="menu-shop-info">
+                <strong><span id="menuShopName"></span></strong>
+                <span id="menuShopAddress"></span>
+            </div>
+            <div class="menu-item" id="logoutButton">🔄 Reset Shop Setup</div>
+        </div>
+    </div>
     <div class="header">
         <h1>🐄 Ganesh Dairy 🥛</h1>
-        <h3>Fresh • Pure • Local Milk Everyday</h3>
+        <h3 id="headerSubtitle">Fresh • Pure • Local Milk Everyday</h3>
     </div>
 
-    <form class="login-section" id="loginForm">
+    <form class="form-card" id="registrationForm">
+        <h2>Shop Setup - First Time Use</h2>
+        <div class="input-group">
+            <input type="text" id="shopName" placeholder="Your Shop Name" autocomplete="organization" required>
+        </div>
+        <div class="input-group">
+            <input type="text" id="shopAddress" placeholder="Shop Address (e.g., City/Area)" autocomplete="address-level2" required>
+        </div>
+        
+        <button type="submit">Save Shop Details & Continue</button>
+        
+        <div class="error" id="regErrorMsg">⚠️ Please fill out both the shop name and address!</div>
+    </form>
+    <form class="form-card" id="loginForm" style="display:none; opacity:0; transform:translateY(40px);">
+        <h2>Customer Login</h2>
         <div class="input-group">
             <input type="text" id="custName" placeholder="Customer Name" autocomplete="name" required>
         </div>
@@ -185,31 +288,92 @@
         
         <button type="submit">Login to Account</button>
         
-        <div class="error" id="errorMsg">⚠️ Please ensure both fields are filled correctly!</div>
+        <div class="error" id="loginErrorMsg">⚠️ Please ensure both fields are filled correctly!</div>
     </form>
-
     <footer>&copy; 2025 Ganesh Dairy. All Rights Reserved.</footer>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Stop the form from submitting normally
+        const REG_FORM = document.getElementById('registrationForm');
+        const LOGIN_FORM = document.getElementById('loginForm');
+        const REG_ERROR_MSG = document.getElementById('regErrorMsg');
+        const LOGIN_ERROR_MSG = document.getElementById('loginErrorMsg');
+        const PROFILE_CIRCLE = document.getElementById('profileCircle');
+        const PROFILE_MENU = document.getElementById('profileMenu');
+        const HEADER_SUBTITLE = document.getElementById('headerSubtitle');
+        
+        // Function to update the profile circle content
+        function updateProfile(shopName, shopAddress) {
+            const initial = shopName.charAt(0).toUpperCase();
+            document.getElementById('profileInitial').textContent = initial;
+            document.getElementById('menuShopName').textContent = shopName;
+            document.getElementById('menuShopAddress').textContent = shopAddress;
+            PROFILE_CIRCLE.style.display = 'flex';
+        }
+
+        // Function to switch from Registration to Login
+        function showLoginForm() {
+            // Hide registration form with animation
+            REG_FORM.style.opacity = '0';
+            REG_FORM.style.transform = 'translateY(-40px)';
+            
+            // Show login form after a delay
+            setTimeout(() => {
+                REG_FORM.style.display = 'none';
+                LOGIN_FORM.style.display = 'block';
+                // Trigger the fadeUp animation for login form
+                LOGIN_FORM.style.opacity = '1';
+                LOGIN_FORM.style.transform = 'translateY(0)';
+                HEADER_SUBTITLE.textContent = 'Welcome Back! Enter Customer Details.';
+            }, 500); // Matches the CSS transition duration
+        }
+
+        // --- Shop Registration Logic ---
+        REG_FORM.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const shopNameInput = document.getElementById("shopName");
+            const shopAddressInput = document.getElementById("shopAddress");
+            
+            const name = shopNameInput.value.trim();
+            const address = shopAddressInput.value.trim();
+
+            if (name === "" || address === "") {
+                REG_ERROR_MSG.style.display = "block";
+                shopNameInput.classList.toggle('input-error', name === "");
+                shopAddressInput.classList.toggle('input-error', address === "");
+                return;
+            }
+            
+            // Clear error state and save data
+            REG_ERROR_MSG.style.display = "none";
+            shopNameInput.classList.remove('input-error');
+            shopAddressInput.classList.remove('input-error');
+
+            localStorage.setItem("shopName", name);
+            localStorage.setItem("shopAddress", address);
+
+            updateProfile(name, address);
+            showLoginForm();
+        });
+
+        // --- Customer Login Logic (Modified to use LOGIN_ERROR_MSG) ---
+        LOGIN_FORM.addEventListener('submit', function(event) {
+            event.preventDefault(); 
             
             const nameInput = document.getElementById("custName");
             const numberInput = document.getElementById("custNumber");
-            const errorMsg = document.getElementById("errorMsg");
 
             const name = nameInput.value.trim();
             const number = numberInput.value.trim();
 
             if (name === "" || number === "") {
-                errorMsg.style.display = "block";
+                LOGIN_ERROR_MSG.style.display = "block";
                 nameInput.classList.toggle('input-error', name === "");
                 numberInput.classList.toggle('input-error', number === "");
                 return;
             }
             
             // Clear error state
-            errorMsg.style.display = "none";
+            LOGIN_ERROR_MSG.style.display = "none";
             nameInput.classList.remove('input-error');
             numberInput.classList.remove('input-error');
 
@@ -221,16 +385,62 @@
             window.location.href = "record.html";
         });
         
-        // Optional: Clear error message when user starts typing
+        // --- Profile Circle Menu Toggle ---
+        PROFILE_CIRCLE.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevents click from immediately closing the menu
+            PROFILE_MENU.classList.toggle('open');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!PROFILE_CIRCLE.contains(e.target) && PROFILE_MENU.classList.contains('open')) {
+                PROFILE_MENU.classList.remove('open');
+            }
+        });
+
+        // --- Logout/Reset Logic ---
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            if (confirm("Are you sure you want to reset the shop setup? This will require re-registration.")) {
+                localStorage.removeItem("shopName");
+                localStorage.removeItem("shopAddress");
+                localStorage.removeItem("customerName");
+                localStorage.removeItem("customerNumber");
+                window.location.reload(); // Reload the page to start over
+            }
+        });
+
+        // --- Initial Check for Shop Data ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedShopName = localStorage.getItem("shopName");
+            const savedShopAddress = localStorage.getItem("shopAddress");
+            
+            if (savedShopName && savedShopAddress) {
+                // If shop is registered, show login form and profile circle
+                updateProfile(savedShopName, savedShopAddress);
+                showLoginForm();
+                REG_FORM.style.display = 'none'; // Ensure registration form is hidden immediately on load
+                LOGIN_FORM.style.display = 'block';
+                LOGIN_FORM.style.opacity = '1';
+                LOGIN_FORM.style.transform = 'translateY(0)';
+            } else {
+                // If not registered, show registration form
+                REG_FORM.style.display = 'block';
+                LOGIN_FORM.style.display = 'none';
+            }
+        });
+
+        // Optional: Clear error message when user starts typing on any input
         document.querySelectorAll('input').forEach(input => {
             input.addEventListener('input', () => {
-                document.getElementById("errorMsg").style.display = "none";
                 input.classList.remove('input-error');
+                if (input.closest('#registrationForm')) {
+                    REG_ERROR_MSG.style.display = "none";
+                } else if (input.closest('#loginForm')) {
+                    LOGIN_ERROR_MSG.style.display = "none";
+                }
             });
         });
     </script>
 
 </body>
 </html>
-
-

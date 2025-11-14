@@ -29,7 +29,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('https://github.com/omkartakkekar2007-coder/FP-/blob/main/Gemini_Generated_Image_wyx09awyx09awyx0.png/0'); 
+            /* 🟢 FIXED: Changed to raw.githubusercontent.com for hosting compatibility */
+            background-image: url('https://raw.githubusercontent.com/omkartakkekar2007-coder/FP-/main/Gemini_Generated_Image_wyx09awyx09awyx0.png'); 
             background-size: cover;
             background-position: center;
             background-color: var(--gradient-end); 
@@ -80,6 +81,7 @@
             right: 0;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
             width: 200px;
@@ -153,7 +155,6 @@
             width: 90%;
             animation: fadeUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             z-index: 1;
-            /* Added for form-switching animation */
             transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; 
         }
 

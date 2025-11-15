@@ -18,7 +18,6 @@
       min-height:100vh;
     }
 
-    /* ---------------- PROFILE BUTTON ---------------- */
     .profile-btn{
       position: fixed;
       top: 20px;
@@ -43,7 +42,6 @@
       transform:scale(1.06);
     }
 
-    /* ---------------- PROFILE POPUP ---------------- */
     .profile-popup{
       position:fixed;
       top:80px;
@@ -92,7 +90,6 @@
       background:#fff;
     }
 
-    /* Main content dummy */
     .content-box{
       margin-top:120px;
       padding:25px;
@@ -103,10 +100,8 @@
 </head>
 <body>
 
-  <!-- PROFILE BUTTON -->
   <div class="profile-btn" id="profileBtn">P</div>
 
-  <!-- PROFILE POPUP -->
   <div class="profile-popup" id="profilePopup">
     <h2 id="shopName">Shop Name</h2>
     <p id="shopAddress">Address...</p>
@@ -118,11 +113,10 @@
 
   <div class="content-box">
     <h1>Welcome to Milk Dairy Dashboard</h1>
-    <p>Your main homepage goes here…</p>
+    <p>Your main homepage goes here...</p>
   </div>
 
   <script>
-    // Load shop data from localStorage
     document.getElementById("shopName").innerText =
       localStorage.getItem("shopName") || "My Shop";
 
@@ -132,11 +126,9 @@
     document.getElementById("shopPhone").innerText =
       "📞 " + (localStorage.getItem("shopPhone") || "No Phone");
 
-    // Button letter (first letter of shop)
     document.getElementById("profileBtn").innerText =
       (localStorage.getItem("shopName") || "S").charAt(0).toUpperCase();
 
-    // Popup toggle
     const btn = document.getElementById("profileBtn");
     const popup = document.getElementById("profilePopup");
 
@@ -144,12 +136,10 @@
       popup.style.display = popup.style.display === "block" ? "none" : "block";
     };
 
-    // Go to record page
     function goRecord(){
       window.location.href = "record.html";
     }
 
-    // Logout
     function logout(){
       localStorage.clear();
       window.location.href = "setup.html";

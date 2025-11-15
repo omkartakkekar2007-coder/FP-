@@ -17,7 +17,7 @@
       min-height:100vh;
     }
 
-    /* SAME PROFILE CSS */
+    /* PROFILE BUTTON */
     .profile-btn{
       position: fixed;
       top: 20px;
@@ -36,10 +36,11 @@
       box-shadow:0 4px 15px rgba(0,0,0,0.2);
       transition:0.2s;
       z-index:999;
+      user-select:none;
     }
-
     .profile-btn:hover{ transform:scale(1.06); }
 
+    /* PROFILE POPUP (hidden by default) */
     .profile-popup{
       position:fixed;
       top:80px;
@@ -50,9 +51,18 @@
       padding:20px;
       border-radius:18px;
       box-shadow:0 10px 35px rgba(0,0,0,0.25);
-      display:none;
-      animation:slideIn 0.25s ease-out;
+      opacity:0;
+      transform:translateY(-6px);
+      pointer-events:none;
+      transition:opacity .18s ease, transform .18s ease;
       z-index:999;
+    }
+
+    /* visible state */
+    .profile-popup.open{
+      opacity:1;
+      transform:translateY(0);
+      pointer-events:auto;
     }
 
     @keyframes slideIn{
@@ -61,20 +71,20 @@
     }
 
     .profile-popup h2{ font-size:20px; margin-bottom:5px; }
-    .profile-popup p{ font-size:14px; margin-bottom:8px; opacity:0.9; }
+    .profile-popup p{ font-size:14px; margin-bottom:8px; opacity:0.95; }
 
     .popup-btn{
       width:100%;
       margin-top:12px;
       padding:10px;
-      background:rgba(255,255,255,0.9);
+      background:rgba(255,255,255,0.95);
       border:none;
       border-radius:10px;
       font-size:14px;
       cursor:pointer;
       font-weight:600;
+      color:#222;
     }
-
     .popup-btn:hover{ background:#fff; }
 
     .record-page{
@@ -82,58 +92,152 @@
       padding:20px;
       text-align:center;
     }
+
+    /* small helper to show a debug hint (you can remove later) */
+    .debug {
+      position: fixed;
+      left: 20px;
+      bottom: 20px;
+      background: #111;
+      color: #fff;
+      padding:6px 10px;
+      border-radius:8px;
+      font-size:12px;
+      opacity:0.8;
+      z-index:999;
+    }
   </style>
 </head>
 <body>
 
   <!-- PROFILE BUTTON -->
-  <div class="profile-btn" id="profileBtn">P</div>
+  <div class="profile-btn" id="profileBtn" aria-label="Shop profile">P</div>
 
   <!-- PROFILE POPUP -->
-  <div class="profile-popup" id="profilePopup">
+  <div class="profile-popup" id="profilePopup" role="dialog" aria-hidden="true" aria-labelledby="shopName">
     <h2 id="shopName">Shop Name</h2>
     <p id="shopAddress">Address...</p>
     <p id="shopPhone">Phone...</p>
 
-    <button class="popup-btn" onclick="goHome()">Home</button>
-    <button class="popup-btn" onclick="logout()">Logout</button>
+    <button class="popup-btn" id="btnHome">Home</button>
+    <button class="popup-btn" id="btnLogout">Logout</button>
   </div>
 
-  <!------------- MILK RECORD CONTENT ------------->  
+  <!------------- MILK RECORD CONTENT ------------->
   <div class="record-page">
     <h1>Milk Record Page</h1>
     <p>Add your record table here…</p>
   </div>
 
+  <div class="debug" id="debug" style="display:none"></div>
+
   <script>
-    // Load shop data
-    document.getElementById("shopName").innerText =
-      localStorage.getItem("shopName") || "My Shop";
+    (function () {
+      // Elements
+      const shopNameEl = document.getElementById('shopName');
+      const shopAddressEl = document.getElementById('shopAddress');
+      const shopPhoneEl = document.getElementById('shopPhone');
+      const profileBtn = document.getElementById('profileBtn');
+      const profilePopup = document.getElementById('profilePopup');
+      const btnHome = document.getElementById('btnHome');
+      const btnLogout = document.getElementById('btnLogout');
+      const debugEl = document.getElementById('debug');
 
-    document.getElementById("shopAddress").innerText =
-      localStorage.getItem("shopAddress") || "No Address";
+      // Helper: safe read from localStorage
+      function getLS(key, fallback) {
+        try {
+          const v = localStorage.getItem(key);
+          return (v === null || v === undefined) ? fallback : v;
+        } catch (err) {
+          console.error('localStorage read error for', key, err);
+          return fallback;
+        }
+      }
 
-    document.getElementById("shopPhone").innerText =
-      "📞 " + (localStorage.getItem("shopPhone") || "No Phone");
+      // Populate UI from localStorage
+      const shopName = getLS('shopName', '').trim();
+      const shopAddress = getLS('shopAddress', '').trim();
+      const shopPhone = getLS('shopPhone', '').trim();
 
-    document.getElementById("profileBtn").innerText =
-      (localStorage.getItem("shopName") || "S").charAt(0).toUpperCase();
+      shopNameEl.textContent = shopName || 'My Shop';
+      shopAddressEl.textContent = shopAddress || 'No Address';
+      shopPhoneEl.textContent = (shopPhone ? '📞 ' + shopPhone : '📞 No Phone');
 
-    const btn = document.getElementById("profileBtn");
-    const popup = document.getElementById("profilePopup");
+      profileBtn.textContent = (shopName || 'S').charAt(0).toUpperCase();
 
-    btn.onclick = function(){
-      popup.style.display = popup.style.display === "block" ? "none" : "block";
-    };
+      // Debug (visible only if you uncomment below)
+      // debugEl.style.display = 'block';
+      // debugEl.textContent = `shopName="${shopName}" shopAddress="${shopAddress}" shopPhone="${shopPhone}"`;
 
-    function goHome(){
-      window.location.href = "index.html";
-    }
+      // Toggle popup open/close
+      function openPopup() {
+        profilePopup.classList.add('open');
+        profilePopup.setAttribute('aria-hidden', 'false');
+      }
+      function closePopup() {
+        profilePopup.classList.remove('open');
+        profilePopup.setAttribute('aria-hidden', 'true');
+      }
+      function togglePopup() {
+        if (profilePopup.classList.contains('open')) closePopup();
+        else openPopup();
+      }
 
-    function logout(){
-      localStorage.clear();
-      window.location.href = "setup.html";
-    }
+      profileBtn.addEventListener('click', function (ev) {
+        ev.stopPropagation(); // prevent document click handler from immediately closing it
+        togglePopup();
+      });
+
+      // Close when user clicks outside the popup
+      document.addEventListener('click', function (ev) {
+        if (!profilePopup.contains(ev.target) && ev.target !== profileBtn) {
+          closePopup();
+        }
+      });
+
+      // Allow ESC to close popup
+      document.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Escape') closePopup();
+      });
+
+      // Buttons
+      btnHome.addEventListener('click', function () {
+        // keep it simple: go to index
+        window.location.href = 'index.html';
+      });
+
+      btnLogout.addEventListener('click', function () {
+        // Remove shop & customer keys only (less destructive than clear)
+        try {
+          localStorage.removeItem('shopName');
+          localStorage.removeItem('shopAddress');
+          localStorage.removeItem('shopPhone');
+          localStorage.removeItem('customerName');
+          localStorage.removeItem('customerNumber');
+        } catch (err) {
+          console.error('Error clearing localStorage keys:', err);
+        }
+        // Redirect to setup page
+        window.location.href = 'setup.html';
+      });
+
+      // Defensive: if no shopName saved, show small notice in console and keep default values
+      if (!shopName) {
+        console.info('No shopName found in localStorage — profile will show defaults.');
+      }
+
+      // Accessibility: stop clicks inside popup from closing it
+      profilePopup.addEventListener('click', function (ev) {
+        ev.stopPropagation();
+      });
+
+      // Expose for debugging (optional)
+      window.__profileUi = {
+        openPopup,
+        closePopup,
+        togglePopup
+      };
+    })();
   </script>
 
 </body>

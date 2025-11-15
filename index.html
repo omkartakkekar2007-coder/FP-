@@ -1,447 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Ganesh Dairy - Shop Setup & Customer Login</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* CSS Variables for Theming */
-        :root {
-            --primary-color: #1e7b38; /* Dairy Green */
-            --primary-dark: #17642e;
-            --secondary-color: #f0f8f0; /* Off-White Background */
-            --text-dark: #333333;
-            --text-light: #ffffff;
-            --error-color: #d9534f;
-            --gradient-start: #c1fba4; 
-            --gradient-end: #a7e9af;
-            --font-main: 'Poppins', sans-serif;
-            --font-title: 'Montserrat', sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Milk Dairy - Home</title>
 
-        /* Base Reset & Styling */
-        * { margin:0; padding:0; box-sizing:border-box; }
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: "Poppins", sans-serif;
+    }
 
-        .background-image {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            /* 🟢 FIXED: Changed to raw.githubusercontent.com for hosting compatibility */
-            background-image: url('https://raw.githubusercontent.com/omkartakkekar2007-coder/FP-/main/Gemini_Generated_Image_wyx09awyx09awyx0.png'); 
-            background-size: cover;
-            background-position: center;
-            background-color: var(--gradient-end); 
-            background-blend-mode: multiply;
-            opacity: 0.85;
-            z-index: -1;
-        }
-        
-        body {
-            height:100vh;
-            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%); 
-            display:grid;
-            place-items:center;
-            font-family: var(--font-main);
-            color: var(--text-dark);
-            overflow:hidden;
-        }
+    body{
+      background:#f5f5f5;
+      min-height:100vh;
+    }
 
-        /* --- NEW: Profile Circle and Menu --- */
-        .profile-circle {
-            position: absolute;
-            top: 25px;
-            right: 25px;
-            width: 50px;
-            height: 50px;
-            background-color: var(--primary-color);
-            border-radius: 50%;
-            color: var(--text-light);
-            font-size: 1.5rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.3s;
-            z-index: 100;
-            user-select: none;
-            display: none; /* Initially hidden until registration is complete */
-        }
-        .profile-circle:hover {
-            background-color: var(--primary-dark);
-        }
+    /* ---------------- PROFILE BUTTON ---------------- */
+    .profile-btn{
+      position: fixed;
+      top: 20px;
+      right:20px;
+      width:45px;
+      height:45px;
+      background:#000;
+      color:#fff;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:20px;
+      font-weight:600;
+      cursor:pointer;
+      box-shadow:0 4px 15px rgba(0,0,0,0.2);
+      transition:0.2s;
+      z-index:999;
+    }
 
-        .profile-menu {
-            position: absolute;
-            top: 60px; /* Position below the circle */
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-            width: 200px;
-            display: none; /* Initially hidden */
-            padding: 10px 0;
-            text-align: left;
-        }
-        .profile-menu.open {
-            display: block;
-        }
+    .profile-btn:hover{
+      transform:scale(1.06);
+    }
 
-        .menu-shop-info {
-            padding: 8px 15px;
-            font-size: 0.9rem;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 5px;
-        }
-        .menu-shop-info strong {
-            display: block;
-            font-size: 1.05rem;
-            color: var(--primary-dark);
-            margin-bottom: 3px;
-            font-weight: 600;
-        }
+    /* ---------------- PROFILE POPUP ---------------- */
+    .profile-popup{
+      position:fixed;
+      top:80px;
+      right:20px;
+      width:260px;
+      background:linear-gradient(135deg,#4f46e5,#9333ea);
+      color:#fff;
+      padding:20px;
+      border-radius:18px;
+      box-shadow:0 10px 35px rgba(0,0,0,0.25);
+      display:none;
+      animation:slideIn 0.25s ease-out;
+      z-index:999;
+    }
 
-        .menu-item {
-            padding: 10px 15px;
-            font-size: 0.95rem;
-            color: var(--text-dark);
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .menu-item:hover {
-            background-color: var(--secondary-color);
-        }
-        /* --- END: Profile Circle and Menu --- */
+    @keyframes slideIn{
+      from{opacity:0; transform:translateY(-10px);}
+      to{opacity:1; transform:translateY(0);}
+    }
 
-        /* Header Styling */
-        .header {
-            text-align:center;
-            margin-bottom: 30px;
-            animation: fadeDown 1.2s ease-out;
-            z-index: 1;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        .header h1 {
-            font-size: clamp(3rem, 7vw, 4.5rem);
-            color: var(--primary-dark);
-            letter-spacing: 1px;
-            margin-bottom: 4px;
-            font-family: var(--font-title);
-            font-weight: 700;
-        }
-        .header h3 {
-            color: var(--text-dark);
-            font-weight: 500;
-            font-size: 1rem;
-        }
+    .profile-popup h2{
+      font-size:20px;
+      margin-bottom:5px;
+      font-weight:600;
+    }
 
-        /* Form Card Styling (Applied to both forms) */
-        .form-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            text-align:center;
-            max-width: 380px;
-            width: 90%;
-            animation: fadeUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            z-index: 1;
-            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; 
-        }
+    .profile-popup p{
+      font-size:14px;
+      opacity:0.9;
+      margin-bottom:10px;
+    }
 
-        /* New: Registration Card */
-        #registrationForm h2 {
-            font-family: var(--font-title);
-            font-size: 1.5rem;
-            color: var(--primary-dark);
-            margin-bottom: 25px;
-        }
+    .popup-btn{
+      width:100%;
+      margin-top:12px;
+      padding:10px;
+      background:rgba(255,255,255,0.9);
+      border:none;
+      border-radius:10px;
+      font-size:14px;
+      cursor:pointer;
+      font-weight:600;
+    }
 
-        /* Input Field Styling */
-        .input-group {
-            margin-bottom: 18px;
-        }
-        input {
-            padding: 14px 20px;
-            width: 100%;
-            border: 2px solid var(--primary-color);
-            border-radius: 10px;
-            outline: none;
-            font-size: 1rem;
-            background-color: var(--secondary-color);
-            transition: all 0.3s ease;
-        }
-        input:focus { 
-            border-color: var(--primary-dark);
-            box-shadow: 0 0 15px rgba(30, 123, 56, 0.4); 
-            transform: scale(1.01); 
-        }
-        /* New: Input error state */
-        .input-error {
-            border-color: var(--error-color) !important;
-            box-shadow: 0 0 10px rgba(217, 83, 79, 0.6);
-        }
+    .popup-btn:hover{
+      background:#fff;
+    }
 
-        /* Button Styling */
-        button {
-            margin-top: 10px;
-            padding: 14px 50px;
-            width: 100%;
-            background: var(--primary-color);
-            color: var(--text-light);
-            border: none;
-            border-radius: 10px;
-            font-size: 1.05rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            letter-spacing: 0.5px;
-        }
-        button:hover { 
-            background: var(--primary-dark); 
-            box-shadow: 0 4px 12px rgba(30, 123, 56, 0.4);
-        }
-        button:active {
-            transform: scale(0.98);
-        }
-        
-        /* Error Message Styling */
-        .error {
-            color: var(--error-color);
-            background-color: #f8d7da;
-            border: 1px solid var(--error-color);
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            margin-top: 15px;
-            display:none;
-            opacity: 0; 
-            animation: fadeIn 0.4s ease-out forwards;
-        }
+    /* Main content dummy */
+    .content-box{
+      margin-top:120px;
+      padding:25px;
+      text-align:center;
+    }
 
-        /* Footer */
-        footer { 
-            position:absolute; 
-            bottom:20px; 
-            font-size:0.85rem; 
-            color:var(--text-dark); 
-            opacity: 0.9;
-            animation: fadeIn 1.6s ease; 
-            z-index: 1;
-            text-shadow: 0.5px 0.5px 1px rgba(255, 255, 255, 0.5);
-        }
-
-        /* Keyframe Animations */
-        @keyframes fadeUp { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes fadeDown { from{opacity:0;transform:translateY(-40px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-
-    </style>
+  </style>
 </head>
 <body>
-    <div class="background-image"></div> 
 
-    <div class="profile-circle" id="profileCircle">
-        <span id="profileInitial">G</span>
-        <div class="profile-menu" id="profileMenu">
-            <div class="menu-shop-info">
-                <strong><span id="menuShopName"></span></strong>
-                <span id="menuShopAddress"></span>
-            </div>
-            <div class="menu-item" id="logoutButton">🔄 Reset Shop Setup</div>
-        </div>
-    </div>
-    <div class="header">
-        <h1>🐄 Ganesh Dairy 🥛</h1>
-        <h3 id="headerSubtitle">Fresh • Pure • Local Milk Everyday</h3>
-    </div>
+  <!-- PROFILE BUTTON -->
+  <div class="profile-btn" id="profileBtn">P</div>
 
-    <form class="form-card" id="registrationForm">
-        <h2>Shop Setup - First Time Use</h2>
-        <div class="input-group">
-            <input type="text" id="shopName" placeholder="Your Shop Name" autocomplete="organization" required>
-        </div>
-        <div class="input-group">
-            <input type="text" id="shopAddress" placeholder="Shop Address (e.g., City/Area)" autocomplete="address-level2" required>
-        </div>
-        
-        <button type="submit">Save Shop Details & Continue</button>
-        
-        <div class="error" id="regErrorMsg">⚠️ Please fill out both the shop name and address!</div>
-    </form>
-    <form class="form-card" id="loginForm" style="display:none; opacity:0; transform:translateY(40px);">
-        <h2>Customer Login</h2>
-        <div class="input-group">
-            <input type="text" id="custName" placeholder="Customer Name" autocomplete="name" required>
-        </div>
-        <div class="input-group">
-            <input type="tel" id="custNumber" placeholder="Customer Number" inputmode="numeric" required>
-        </div>
-        
-        <button type="submit">Login to Account</button>
-        
-        <div class="error" id="loginErrorMsg">⚠️ Please ensure both fields are filled correctly!</div>
-    </form>
-    <footer>&copy; 2025 Ganesh Dairy. All Rights Reserved.</footer>
+  <!-- PROFILE POPUP -->
+  <div class="profile-popup" id="profilePopup">
+    <h2 id="shopName">Shop Name</h2>
+    <p id="shopAddress">Address...</p>
+    <p id="shopPhone">Phone...</p>
 
-    <script>
-        const REG_FORM = document.getElementById('registrationForm');
-        const LOGIN_FORM = document.getElementById('loginForm');
-        const REG_ERROR_MSG = document.getElementById('regErrorMsg');
-        const LOGIN_ERROR_MSG = document.getElementById('loginErrorMsg');
-        const PROFILE_CIRCLE = document.getElementById('profileCircle');
-        const PROFILE_MENU = document.getElementById('profileMenu');
-        const HEADER_SUBTITLE = document.getElementById('headerSubtitle');
-        
-        // Function to update the profile circle content
-        function updateProfile(shopName, shopAddress) {
-            const initial = shopName.charAt(0).toUpperCase();
-            document.getElementById('profileInitial').textContent = initial;
-            document.getElementById('menuShopName').textContent = shopName;
-            document.getElementById('menuShopAddress').textContent = shopAddress;
-            PROFILE_CIRCLE.style.display = 'flex';
-        }
+    <button class="popup-btn" onclick="goRecord()">Milk Record</button>
+    <button class="popup-btn" onclick="logout()">Logout</button>
+  </div>
 
-        // Function to switch from Registration to Login
-        function showLoginForm() {
-            // Hide registration form with animation
-            REG_FORM.style.opacity = '0';
-            REG_FORM.style.transform = 'translateY(-40px)';
-            
-            // Show login form after a delay
-            setTimeout(() => {
-                REG_FORM.style.display = 'none';
-                LOGIN_FORM.style.display = 'block';
-                // Trigger the fadeUp animation for login form
-                LOGIN_FORM.style.opacity = '1';
-                LOGIN_FORM.style.transform = 'translateY(0)';
-                HEADER_SUBTITLE.textContent = 'Welcome Back! Enter Customer Details.';
-            }, 500); // Matches the CSS transition duration
-        }
+  <div class="content-box">
+    <h1>Welcome to Milk Dairy Dashboard</h1>
+    <p>Your main homepage goes here…</p>
+  </div>
 
-        // --- Shop Registration Logic ---
-        REG_FORM.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const shopNameInput = document.getElementById("shopName");
-            const shopAddressInput = document.getElementById("shopAddress");
-            
-            const name = shopNameInput.value.trim();
-            const address = shopAddressInput.value.trim();
+  <script>
+    // Load shop data from localStorage
+    document.getElementById("shopName").innerText =
+      localStorage.getItem("shopName") || "My Shop";
 
-            if (name === "" || address === "") {
-                REG_ERROR_MSG.style.display = "block";
-                shopNameInput.classList.toggle('input-error', name === "");
-                shopAddressInput.classList.toggle('input-error', address === "");
-                return;
-            }
-            
-            // Clear error state and save data
-            REG_ERROR_MSG.style.display = "none";
-            shopNameInput.classList.remove('input-error');
-            shopAddressInput.classList.remove('input-error');
+    document.getElementById("shopAddress").innerText =
+      localStorage.getItem("shopAddress") || "No Address";
 
-            localStorage.setItem("shopName", name);
-            localStorage.setItem("shopAddress", address);
+    document.getElementById("shopPhone").innerText =
+      "📞 " + (localStorage.getItem("shopPhone") || "No Phone");
 
-            updateProfile(name, address);
-            showLoginForm();
-        });
+    // Button letter (first letter of shop)
+    document.getElementById("profileBtn").innerText =
+      (localStorage.getItem("shopName") || "S").charAt(0).toUpperCase();
 
-        // --- Customer Login Logic (Modified to use LOGIN_ERROR_MSG) ---
-        LOGIN_FORM.addEventListener('submit', function(event) {
-            event.preventDefault(); 
-            
-            const nameInput = document.getElementById("custName");
-            const numberInput = document.getElementById("custNumber");
+    // Popup toggle
+    const btn = document.getElementById("profileBtn");
+    const popup = document.getElementById("profilePopup");
 
-            const name = nameInput.value.trim();
-            const number = numberInput.value.trim();
+    btn.onclick = function(){
+      popup.style.display = popup.style.display === "block" ? "none" : "block";
+    };
 
-            if (name === "" || number === "") {
-                LOGIN_ERROR_MSG.style.display = "block";
-                nameInput.classList.toggle('input-error', name === "");
-                numberInput.classList.toggle('input-error', number === "");
-                return;
-            }
-            
-            // Clear error state
-            LOGIN_ERROR_MSG.style.display = "none";
-            nameInput.classList.remove('input-error');
-            numberInput.classList.remove('input-error');
+    // Go to record page
+    function goRecord(){
+      window.location.href = "record.html";
+    }
 
-            // Save customer details
-            localStorage.setItem("customerName", name);
-            localStorage.setItem("customerNumber", number);
-
-            // Redirect to record page
-            window.location.href = "record.html";
-        });
-        
-        // --- Profile Circle Menu Toggle ---
-        PROFILE_CIRCLE.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevents click from immediately closing the menu
-            PROFILE_MENU.classList.toggle('open');
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!PROFILE_CIRCLE.contains(e.target) && PROFILE_MENU.classList.contains('open')) {
-                PROFILE_MENU.classList.remove('open');
-            }
-        });
-
-        // --- Logout/Reset Logic ---
-        document.getElementById('logoutButton').addEventListener('click', function() {
-            if (confirm("Are you sure you want to reset the shop setup? This will require re-registration.")) {
-                localStorage.removeItem("shopName");
-                localStorage.removeItem("shopAddress");
-                localStorage.removeItem("customerName");
-                localStorage.removeItem("customerNumber");
-                window.location.reload(); // Reload the page to start over
-            }
-        });
-
-        // --- Initial Check for Shop Data ---
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedShopName = localStorage.getItem("shopName");
-            const savedShopAddress = localStorage.getItem("shopAddress");
-            
-            if (savedShopName && savedShopAddress) {
-                // If shop is registered, show login form and profile circle
-                updateProfile(savedShopName, savedShopAddress);
-                showLoginForm();
-                REG_FORM.style.display = 'none'; // Ensure registration form is hidden immediately on load
-                LOGIN_FORM.style.display = 'block';
-                LOGIN_FORM.style.opacity = '1';
-                LOGIN_FORM.style.transform = 'translateY(0)';
-            } else {
-                // If not registered, show registration form
-                REG_FORM.style.display = 'block';
-                LOGIN_FORM.style.display = 'none';
-            }
-        });
-
-        // Optional: Clear error message when user starts typing on any input
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('input', () => {
-                input.classList.remove('input-error');
-                if (input.closest('#registrationForm')) {
-                    REG_ERROR_MSG.style.display = "none";
-                } else if (input.closest('#loginForm')) {
-                    LOGIN_ERROR_MSG.style.display = "none";
-                }
-            });
-        });
-    </script>
+    // Logout
+    function logout(){
+      localStorage.clear();
+      window.location.href = "setup.html";
+    }
+  </script>
 
 </body>
 </html>

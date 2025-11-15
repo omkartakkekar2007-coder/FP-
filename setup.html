@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Ganesh Dairy - Shop Setup & Customer Login</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
   <style>
     :root{
       --primary-color:#1e7b38;
@@ -18,7 +19,9 @@
       --font-main:'Poppins',sans-serif;
       --font-title:'Montserrat',sans-serif;
     }
+
     *{margin:0;padding:0;box-sizing:border-box}
+
     body{
       min-height:100vh;
       font-family:var(--font-main);
@@ -29,65 +32,191 @@
       background:linear-gradient(135deg,var(--gradient-start),var(--gradient-end));
       padding:30px;
     }
+
     .background-image{
       position:fixed; inset:0; z-index:-1;
       background-image:url('https://raw.githubusercontent.com/omkartakkekar2007-coder/FP-/main/Gemini_Generated_Image_wyx09awyx09awyx0.png');
       background-size:cover; background-position:center; opacity:.85;
     }
-    .container{width:100%;max-width:920px;display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:start}
+
+    .container{
+      width:100%;
+      max-width:920px;
+      display:grid;
+      grid-template-columns:1fr 420px;
+      gap:28px;
+      align-items:start;
+    }
+
     .left{
       padding:28px;border-radius:18px;background:rgba(255,255,255,0.85);
       backdrop-filter:blur(8px); box-shadow:0 12px 30px rgba(0,0,0,0.12);
     }
+
     .right{display:flex;align-items:center;justify-content:center}
+
     .form-card{
       width:100%;max-width:420px;padding:34px;border-radius:16px;
       background:rgba(255,255,255,0.95); box-shadow:0 10px 25px rgba(0,0,0,0.12);
     }
+
     h1{font-family:var(--font-title);color:var(--primary-dark);font-size:2.2rem;margin-bottom:6px}
     p.lead{color:rgba(0,0,0,0.6);margin-bottom:18px}
+
     label{display:block;margin-bottom:6px;font-weight:600;font-size:0.9rem}
-    input{width:100%;padding:12px 14px;border-radius:10px;border:2px solid var(--primary-color);background:var(--secondary-color);font-size:1rem;outline:none}
-    input:focus{box-shadow:0 0 12px rgba(30,123,56,0.18);border-color:var(--primary-dark)}
-    .input-error{border-color:var(--error-color)!important; box-shadow:0 0 10px rgba(217,83,79,0.25)}
+
+    input{
+      width:100%;padding:12px 14px;border-radius:10px;
+      border:2px solid var(--primary-color);
+      background:var(--secondary-color);
+      font-size:1rem;
+      outline:none;
+    }
+
+    input:focus{
+      box-shadow:0 0 12px rgba(30,123,56,0.18);
+      border-color:var(--primary-dark);
+    }
+
+    .input-error{
+      border-color:var(--error-color)!important;
+      box-shadow:0 0 10px rgba(217,83,79,0.25);
+    }
+
     .muted{font-size:0.88rem;color:rgba(0,0,0,0.55)}
-    button{display:inline-block;margin-top:12px;padding:12px 18px;border-radius:10px;border:none;background:var(--primary-color);color:var(--text-light);font-weight:700;cursor:pointer;width:100%}
+
+    button{
+      display:inline-block;margin-top:12px;padding:12px 18px;border-radius:10px;
+      border:none;background:var(--primary-color);
+      color:var(--text-light);font-weight:700;cursor:pointer;width:100%;
+    }
+
     button:hover{background:var(--primary-dark)}
-    .error{display:none;margin-top:12px;padding:10px;border-radius:8px;background:#f8d7da;color:var(--error-color);border:1px solid var(--error-color)}
+
+    .error{
+      display:none;margin-top:12px;padding:10px;border-radius:8px;
+      background:#f8d7da;color:var(--error-color);border:1px solid var(--error-color)
+    }
+
     footer{margin-top:18px;font-size:0.85rem;color:rgba(0,0,0,0.6)}
-    /* Profile circle + menu */
-    .profile-circle{position:fixed;top:18px;right:18px;width:50px;height:50px;border-radius:50%;background:var(--primary-color);display:flex;align-items:center;justify-content:center;color:var(--text-light);font-weight:700;font-size:1.2rem;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,0.15);z-index:50;display:none}
-    .profile-menu{position:fixed;top:80px;right:18px;width:240px;background:rgba(255,255,255,0.96);border-radius:10px;box-shadow:0 8px 26px rgba(0,0,0,0.12);display:none;z-index:60;padding:10px}
-    .profile-menu.open{display:block}
-    .menu-shop-info{padding:8px 12px;border-bottom:1px solid #eee}
-    .menu-shop-info strong{color:var(--primary-dark);display:block}
-    .menu-item{padding:10px 12px;cursor:pointer;border-radius:8px}
-    .menu-item:hover{background:var(--secondary-color)}
-    .top-links{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
-    .btn-ghost{background:transparent;border:1px solid rgba(0,0,0,0.08);padding:8px 12px;border-radius:8px;cursor:pointer}
+
+
+    /* ======================================================
+       🔥 NEW MODERN PROFILE UI (UPDATED FULLY)
+       ====================================================== */
+
+    .profile-circle{
+      position:fixed;
+      top:18px;
+      right:18px;
+      width:55px;
+      height:55px;
+      border-radius:50%;
+      background:var(--primary-color);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--text-light);
+      font-weight:700;
+      font-size:1.25rem;
+      cursor:pointer;
+      box-shadow:0 6px 18px rgba(0,0,0,0.18);
+      z-index:50;
+      display:none;
+      border:3px solid rgba(255,255,255,0.8);
+    }
+
+    .profile-menu{
+      position:fixed;
+      top:85px;
+      right:18px;
+      width:270px;
+      background:rgba(255,255,255,0.98);
+      border-radius:18px;
+      box-shadow:0 12px 34px rgba(0,0,0,0.16);
+      display:none;
+      z-index:60;
+      padding:16px;
+      animation:fadeSlide .25s ease-out;
+    }
+
+    .profile-menu.open{display:block;}
+
+    @keyframes fadeSlide{
+      from{opacity:0; transform:translateY(-6px);}
+      to{opacity:1; transform:translateY(0);}
+    }
+
+    .menu-shop-info{
+      padding:14px;
+      border-bottom:2px solid rgba(0,0,0,0.08);
+      background:linear-gradient(135deg,#e8ffe8,#f6fff6);
+      border-radius:14px;
+      margin-bottom:10px;
+    }
+
+    .menu-shop-info strong{
+      font-size:1.15rem;
+      font-weight:700;
+      color:var(--primary-dark);
+      display:block;
+      margin-bottom:4px;
+    }
+
+    .menu-shop-info .muted{
+      font-size:0.88rem;
+      color:#666;
+      margin-top:2px;
+    }
+
+    .menu-item{
+      padding:12px 14px;
+      cursor:pointer;
+      border-radius:10px;
+      font-size:0.95rem;
+      font-weight:500;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      transition:0.2s;
+    }
+
+    .menu-item:hover{
+      background:var(--secondary-color);
+      padding-left:18px;
+    }
+
+
     /* Responsive */
     @media (max-width:880px){
       .container{grid-template-columns:1fr; padding-bottom:120px}
       .profile-menu{right:12px}
     }
+
   </style>
 </head>
+
 <body>
   <div class="background-image"></div>
 
+  <!-- Profile UI -->
   <div class="profile-circle" id="profileCircle"><span id="profileInitial">G</span></div>
+
   <div class="profile-menu" id="profileMenu">
     <div class="menu-shop-info">
       <strong id="menuShopName">Shop Name</strong>
       <div id="menuShopAddress" class="muted">Address</div>
       <div id="menuShopPhone" class="muted">Phone</div>
     </div>
+
     <div class="menu-item" id="goToIndex">🏠 Open Dashboard</div>
     <div class="menu-item" id="goToRecord">📋 Milk Record</div>
     <div class="menu-item" id="resetShop">🔄 Reset Shop Setup</div>
   </div>
 
+  <!-- Main Layout -->
   <div class="container">
+
     <div class="left">
       <h1>🐄 Ganesh Dairy</h1>
       <p class="lead">Set up your shop (name, address & phone). After setup your customers can log in and you'll see the profile on all pages.</p>
@@ -101,50 +230,58 @@
 
     <div class="right">
       <div style="width:100%;max-width:420px">
+
         <!-- Registration Card -->
         <form class="form-card" id="registrationForm">
-          <h2 style="font-family:var(--font-title);color:var(--primary-dark);margin-bottom:12px">Shop Setup - First Time Use</h2>
+          <h2 style="font-family:var(--font-title);color:var(--primary-dark);margin-bottom:12px">
+            Shop Setup - First Time Use
+          </h2>
 
           <label for="shopName">Shop Name</label>
-          <input id="shopName" type="text" placeholder="e.g., Ganesh Dairy" autocomplete="organization" required>
+          <input id="shopName" type="text" required>
 
           <div style="height:12px"></div>
 
           <label for="shopAddress">Shop Address</label>
-          <input id="shopAddress" type="text" placeholder="City / Area" autocomplete="street-address" required>
+          <input id="shopAddress" type="text" required>
 
           <div style="height:12px"></div>
 
           <label for="shopPhone">Phone Number</label>
-          <input id="shopPhone" type="tel" placeholder="e.g., 9876543210" inputmode="numeric" required>
+          <input id="shopPhone" type="tel" inputmode="numeric" required>
 
           <div class="error" id="regErrorMsg">⚠️ Please fill out all fields correctly.</div>
 
-          <button type="submit" id="saveShopBtn">Save Shop Details & Continue</button>
+          <button type="submit">Save Shop Details & Continue</button>
         </form>
 
-        <!-- Login Card (hidden by default until registration) -->
+        <!-- Login Card -->
         <form class="form-card" id="loginForm" style="display:none;margin-top:14px">
-          <h2 style="font-family:var(--font-title);color:var(--primary-dark);margin-bottom:12px">Customer Login</h2>
+          <h2 style="font-family:var(--font-title);color:var(--primary-dark);margin-bottom:12px">
+            Customer Login
+          </h2>
 
           <label for="custName">Customer Name</label>
-          <input id="custName" type="text" placeholder="Customer name" autocomplete="name" required>
+          <input id="custName" type="text" required>
 
           <div style="height:12px"></div>
 
           <label for="custNumber">Customer Number</label>
-          <input id="custNumber" type="tel" placeholder="Customer phone" inputmode="numeric" required>
+          <input id="custNumber" type="tel" inputmode="numeric" required>
 
           <div class="error" id="loginErrorMsg">⚠️ Please fill both fields.</div>
 
-          <button type="submit" id="loginBtn">Login & Go to Dashboard</button>
+          <button type="submit">Login & Go to Dashboard</button>
         </form>
+
       </div>
     </div>
+
   </div>
 
+
+  <!-- JavaScript -->
   <script>
-    // Elements
     const registrationForm = document.getElementById('registrationForm');
     const loginForm = document.getElementById('loginForm');
     const regError = document.getElementById('regErrorMsg');
@@ -160,11 +297,11 @@
     const goToRecord = document.getElementById('goToRecord');
     const resetShop = document.getElementById('resetShop');
 
-    // Utilities
     function showProfileIfReady(){
       const sName = localStorage.getItem('shopName');
       const sAddr = localStorage.getItem('shopAddress');
       const sPhone = localStorage.getItem('shopPhone');
+
       if(sName && sAddr && sPhone){
         profileCircle.style.display='flex';
         menuShopName.textContent = sName;
@@ -177,99 +314,75 @@
       }
     }
 
-    // Registration
-    registrationForm.addEventListener('submit', (e) => {
+    registrationForm.addEventListener('submit', (e)=>{
       e.preventDefault();
-      const name = document.getElementById('shopName').value.trim();
-      const address = document.getElementById('shopAddress').value.trim();
-      const phone = document.getElementById('shopPhone').value.trim();
 
-      if(!name || !address || !phone){
+      const name = shopName.value.trim();
+      const addr = shopAddress.value.trim();
+      const phone = shopPhone.value.trim();
+
+      if(!name || !addr || !phone){
         regError.style.display='block';
-        if(!name) document.getElementById('shopName').classList.add('input-error');
-        if(!address) document.getElementById('shopAddress').classList.add('input-error');
-        if(!phone) document.getElementById('shopPhone').classList.add('input-error');
         return;
       }
-      // Save
+
       localStorage.setItem('shopName', name);
-      localStorage.setItem('shopAddress', address);
+      localStorage.setItem('shopAddress', addr);
       localStorage.setItem('shopPhone', phone);
 
       regError.style.display='none';
-      document.getElementById('shopName').classList.remove('input-error');
-      document.getElementById('shopAddress').classList.remove('input-error');
-      document.getElementById('shopPhone').classList.remove('input-error');
-
-      // Show profile and show login
       showProfileIfReady();
+
       registrationForm.style.display='none';
       loginForm.style.display='block';
-      // smooth scroll to login or focus
-      document.getElementById('custName').focus();
+      custName.focus();
     });
 
-    // Customer login (redirect to index.html)
-    loginForm.addEventListener('submit', (e) => {
+    loginForm.addEventListener('submit', (e)=>{
       e.preventDefault();
-      const cName = document.getElementById('custName').value.trim();
-      const cNum = document.getElementById('custNumber').value.trim();
+
+      const cName = custName.value.trim();
+      const cNum = custNumber.value.trim();
 
       if(!cName || !cNum){
         loginError.style.display='block';
-        if(!cName) document.getElementById('custName').classList.add('input-error');
-        if(!cNum) document.getElementById('custNumber').classList.add('input-error');
         return;
       }
-      loginError.style.display='none';
+
       localStorage.setItem('customerName', cName);
       localStorage.setItem('customerNumber', cNum);
 
-      // Redirect to index (choice A)
-      window.location.href = 'index.html';
+      window.location.href = "index.html";
     });
 
-    // Profile menu toggle
-    profileCircle.addEventListener('click', (ev) => {
-      ev.stopPropagation();
+    profileCircle.addEventListener('click', (e)=>{
+      e.stopPropagation();
       profileMenu.classList.toggle('open');
     });
-    document.addEventListener('click', () => profileMenu.classList.remove('open'));
 
-    // Menu actions
-    goToIndex.addEventListener('click', () => window.location.href = 'index.html');
-    goToRecord.addEventListener('click', () => window.location.href = 'record.html');
-    resetShop.addEventListener('click', () => {
-      if(confirm('Reset shop setup? This clears shop and customer data.')){
-        localStorage.removeItem('shopName');
-        localStorage.removeItem('shopAddress');
-        localStorage.removeItem('shopPhone');
-        localStorage.removeItem('customerName');
-        localStorage.removeItem('customerNumber');
+    document.addEventListener('click', ()=>{
+      profileMenu.classList.remove('open');
+    });
+
+    goToIndex.onclick = ()=> window.location.href = "index.html";
+    goToRecord.onclick = ()=> window.location.href = "record.html";
+
+    resetShop.onclick = ()=>{
+      if(confirm("Reset shop setup?")){
+        localStorage.clear();
         window.location.reload();
       }
-    });
+    };
 
-    // Init: if shop already exists, show login immediately
-    document.addEventListener('DOMContentLoaded', () => {
-      const s = localStorage.getItem('shopName');
-      const a = localStorage.getItem('shopAddress');
-      const p = localStorage.getItem('shopPhone');
+    document.addEventListener('DOMContentLoaded', ()=>{
       showProfileIfReady();
-      if(s && a && p){
+
+      if(localStorage.getItem('shopName')){
         registrationForm.style.display='none';
         loginForm.style.display='block';
-      } else {
-        registrationForm.style.display='block';
-        loginForm.style.display='none';
       }
     });
-
-    // Clear input-error when typing
-    document.querySelectorAll('input').forEach(inp => {
-      inp.addEventListener('input', () => inp.classList.remove('input-error'));
-    });
   </script>
+
 </body>
 </html>
-

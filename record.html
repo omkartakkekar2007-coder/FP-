@@ -10,142 +10,154 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: "Poppins", sans-serif;
         }
 
         body {
-            background: #f8f8f8;
+            background: linear-gradient(135deg, #c1fba4, #a7e9af);
+            min-height: 100vh;
             padding: 20px;
         }
 
         .container {
-            max-width: 450px;
-            background: #fff;
+            max-width: 500px;
             margin: auto;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.95);
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            animation: fadeUp 0.9s ease;
         }
 
-        h2 {
+        h1 {
             text-align: center;
-            margin-bottom: 20px;
-            color: #222;
+            color: #1e7b38;
+            margin-bottom: 18px;
+            font-size: 32px;
         }
 
         label {
+            font-size: 15px;
             font-weight: 600;
+            color: #1e7b38;
         }
 
         input {
             width: 100%;
-            padding: 10px;
-            margin: 6px 0 15px;
-            border: 1px solid #aaa;
-            border-radius: 6px;
-            font-size: 14px;
+            padding: 12px;
+            border: 2px solid #1e7b38;
+            border-radius: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            outline: none;
         }
 
         button {
             width: 100%;
-            padding: 10px;
-            background: black;
-            color: white;
-            font-size: 15px;
+            padding: 12px;
+            background: #1e7b38;
+            color: #fff;
             border: none;
-            border-radius: 6px;
+            border-radius: 12px;
+            font-size: 16px;
             cursor: pointer;
+            transition: 0.25s;
         }
 
         button:hover {
-            background: #333;
+            background: #17642e;
+            transform: scale(1.03);
         }
 
         table {
             width: 100%;
             margin-top: 20px;
-            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
         }
 
-        th {
-            background: black;
+        table th {
+            background: #1e7b38;
             color: white;
             padding: 10px;
+            font-size: 15px;
         }
 
-        td {
+        table td {
+            background: rgba(255,255,255,0.9);
             padding: 10px;
-            background: #fff;
-            border-bottom: 1px solid #ddd;
             text-align: center;
         }
 
         .back-btn {
             margin-top: 15px;
-            background: #555;
+            background: #03583f;
         }
 
-        .back-btn:hover {
-            background: #333;
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(25px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
     </style>
 </head>
+
 <body>
 
     <div class="container">
-        <h2>Milk Record</h2>
+        <h1>Milk Record</h1>
 
         <label>Date:</label>
         <input type="date" id="date">
 
         <label>Milk (Litre):</label>
-        <input type="number" id="milk" placeholder="Enter milk in litres">
+        <input type="number" id="milk" placeholder="Enter litres">
 
-        <button onclick="addRecord()">Add</button>
+        <button onclick="saveRecord()">Add Record</button>
 
         <table>
             <thead>
                 <tr>
                     <th>Date</th>
-                    <th>Milk (L)</th>
+                    <th>Milk</th>
                 </tr>
             </thead>
-            <tbody id="recordList"></tbody>
+            <tbody id="recordList">
+            </tbody>
         </table>
 
-        <button class="back-btn" onclick="goBack()">Back</button>
+        <button class="back-btn" onclick="goBack()">⬅ Back</button>
     </div>
 
     <script>
-        function addRecord() {
-            let date = document.getElementById("date").value;
-            let milk = document.getElementById("milk").value;
+        function saveRecord() {
+            const date = document.getElementById("date").value;
+            const milk = document.getElementById("milk").value;
 
             if (date === "" || milk === "") {
-                alert("Please enter both date and milk quantity.");
+                alert("Please enter both date and milk quantity!");
                 return;
             }
 
-            let records = JSON.parse(localStorage.getItem("records")) || [];
+            let list = JSON.parse(localStorage.getItem("milkRecords")) || [];
 
-            records.push({ date, milk });
+            list.push({ date, milk });
 
-            localStorage.setItem("records", JSON.stringify(records));
+            localStorage.setItem("milkRecords", JSON.stringify(list));
 
             loadRecords();
         }
 
         function loadRecords() {
-            let records = JSON.parse(localStorage.getItem("records")) || [];
-            let table = document.getElementById("recordList");
+            let list = JSON.parse(localStorage.getItem("milkRecords")) || [];
+            const table = document.getElementById("recordList");
             table.innerHTML = "";
 
-            records.forEach((r) => {
+            list.forEach(r => {
                 table.innerHTML += `
                     <tr>
                         <td>${r.date}</td>
-                        <td>${r.milk}</td>
+                        <td>${r.milk} L</td>
                     </tr>
                 `;
             });

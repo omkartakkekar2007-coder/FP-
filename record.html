@@ -1,182 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Milk Record</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ganesh Dairy - Milk Record</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:"Poppins",sans-serif; }
+    body {
+      background: linear-gradient(135deg,#a8edea,#fed6e3);
+      min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:22px;
+    }
+    h1 { color:#2e8b57; margin-top:20px; margin-bottom:8px; animation:fadeDown 1.2s ease; }
+    h3 { color:#444; margin-bottom:18px; }
+    .form-section {
+      background:rgba(255,255,255,0.92); padding:18px 24px; border-radius:12px;
+      box-shadow:0 6px 18px rgba(0,0,0,0.08);
+      text-align:center; width:380px; animation:fadeIn 1.4s ease;
+    }
+    input, button { padding:10px; margin:8px 6px; border-radius:8px; border:1px solid #2e8b57; font-size:15px; }
+    input[type="date"] { width:150px; }
+    input[type="number"] { width:100px; }
+    button { background:#2e8b57; color:#fff; border:none; cursor:pointer; transition:0.2s; }
+    button:hover { background:#256d46; transform:scale(1.02); }
+    table { width:95%; border-collapse:collapse; margin-top:34px; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.06); animation:fadeUp 1.2s ease; }
+    th, td { padding:12px; text-align:center; border-bottom:1px solid #eee; }
+    th { background:#2e8b57; color:#fff; }
+    tr:hover { background:#fafafa; }
+    .back-btn { position:absolute; left:18px; top:18px; background:#256d46; color:#fff; padding:8px 12px; border-radius:8px; text-decoration:none; font-size:14px; transition:0.2s; }
+    .back-btn:hover { background:#1f5538; }
+    .total { margin-top:14px; font-weight:600; color:#2e8b57; text-align:center; }
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #c1ffb0, #a4f28a);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+    /* Success popup styling */
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      background: #2e8b57;
+      color: #fff;
+      padding: 16px 28px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+      opacity: 0;
+      transition: all 0.4s ease;
+      z-index: 1000;
+      font-size: 16px;
+      text-align: center;
+    }
+    .popup.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
 
-        .container {
-            width: 420px;
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
-            text-align: center;
-        }
-
-        h2 {
-            margin-bottom: 15px;
-            color: #0b5e20;
-        }
-
-        label {
-            float: left;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #0b5e20;
-        }
-
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 12px;
-            border: 2px solid #0b5e20;
-            border-radius: 5px;
-        }
-
-        button {
-            width: 100%;
-            background: #0b5e20;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 10px;
-            font-size: 16px;
-        }
-
-        table {
-            width: 100%;
-            margin-top: 15px;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            border: 1px solid #0b5e20;
-            padding: 8px;
-        }
-
-        th {
-            background: #0b5e20;
-            color: white;
-        }
-
-        #popup {
-            display: none;
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #0b5e20;
-            color: white;
-            padding: 12px 18px;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-    </style>
+    @keyframes fadeUp { from{opacity:0; transform:translateY(24px)} to{opacity:1; transform:translateY(0)} }
+    @keyframes fadeDown { from{opacity:0; transform:translateY(-24px)} to{opacity:1; transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    @media (max-width:520px) { .form-section{width:95%} table{width:100%} input{width:80px} }
+  </style>
 </head>
-
 <body>
 
-    <div id="popup">Record Added Successfully!</div>
+  <a href="page1.html" class="back-btn">⬅ Back</a>
 
-    <div class="container">
-        <h2>Milk Record</h2>
+  <h1>Ganesh Dairy 🥛</h1>
+  <h3 id="custInfo"></h3>
 
-        <label>Date:</label>
-        <input type="date" id="date" />
+  <div class="form-section">
+    <h3>Add Milk Record</h3>
+    <div>
+      <input type="date" id="date" required>
+      <input type="number" id="litres" placeholder="Litres" min="0" step="0.1" required>
+      <input type="number" id="price" placeholder="Price/Litre" min="0" step="0.1" required>
+    </div>
+    <div style="margin-top:6px;">
+      <button onclick="addRecord()">Add Record</button>
+      <button onclick="clearRecords()" style="background:#c0392b; margin-left:8px;">Clear All</button>
+    </div>
+    <div class="total" id="totalDisplay"></div>
+  </div>
 
-        <label>Milk (Litre):</label>
-        <input type="number" id="litre" placeholder="Enter litres" />
+  <table id="recordTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Date</th>
+        <th>Litres</th>
+        <th>Price/Litre</th>
+        <th>Total Price</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-        <label>Price (₹):</label>
-        <input type="number" id="price" placeholder="Enter price" />
+  <!-- Popup message -->
+  <div id="popup" class="popup">✅ Your record successfully added!</div>
 
-        <button onclick="addRecord()">Add Record</button>
+  <script>
+    const customerName = localStorage.getItem("customerName");
+    const customerNumber = localStorage.getItem("customerNumber");
 
-        <table id="recordTable">
-            <tr>
-                <th>Date</th>
-                <th>Milk</th>
-                <th>Price</th>
-            </tr>
-        </table>
+    if (!customerName || !customerNumber) {
+      alert("Please login first!");
+      window.location.href = "page1.html";
+    }
 
-        <button onclick="calculateTotal()">Check Total Amount</button>
-        <button onclick="window.location.href='page1.html'">← Back</button>
-    </div>
+    document.getElementById("custInfo").textContent = `Customer: ${customerName} (No: ${customerNumber})`;
 
-    <script>
-        function showPopup() {
-            let pop = document.getElementById("popup");
-            pop.style.display = "block";
-            setTimeout(() => { pop.style.display = "none"; }, 2000);
-        }
+    let allRecords = JSON.parse(localStorage.getItem("milkRecords") || "{}");
+    let records = allRecords[customerNumber] || [];
 
-        function loadRecords() {
-            let records = JSON.parse(localStorage.getItem("milkRecords")) || [];
-            let table = document.getElementById("recordTable");
+    const tableBody = document.querySelector("#recordTable tbody");
+    const totalDisplay = document.getElementById("totalDisplay");
+    const popup = document.getElementById("popup");
 
-            records.forEach(r => {
-                let row = table.insertRow(-1);
-                row.insertCell(0).innerHTML = r.date;
-                row.insertCell(1).innerHTML = r.litre + " L";
-                row.insertCell(2).innerHTML = "₹" + r.price;
-            });
-        }
+    function showPopup() {
+      popup.classList.add("show");
+      setTimeout(() => popup.classList.remove("show"), 2000);
+    }
 
-        function addRecord() {
-            let date = document.getElementById("date").value;
-            let litre = document.getElementById("litre").value;
-            let price = document.getElementById("price").value;
+    function renderTable() {
+      tableBody.innerHTML = "";
+      if (records.length === 0) {
+        tableBody.innerHTML = "<tr><td colspan='5'>No records yet</td></tr>";
+        totalDisplay.textContent = "Total Milk: 0 L | Total Due: ₹0";
+        return;
+      }
 
-            if (!date || !litre || !price) {
-                alert("Please fill all fields");
-                return;
-            }
+      let totalLitres = 0;
+      let totalPrice = 0;
 
-            let record = { date, litre, price };
+      records.forEach(r => {
+        const tr = document.createElement("tr");
+        const recordTotal = parseFloat(r.litres) * parseFloat(r.price);
+        tr.innerHTML = `
+          <td>${r.name}</td>
+          <td>${r.date}</td>
+          <td>${r.litres}</td>
+          <td>₹${r.price}</td>
+          <td>₹${recordTotal.toFixed(2)}</td>
+        `;
+        tableBody.appendChild(tr);
+        totalLitres += parseFloat(r.litres) || 0;
+        totalPrice += recordTotal || 0;
+      });
 
-            let existing = JSON.parse(localStorage.getItem("milkRecords")) || [];
-            existing.push(record);
-            localStorage.setItem("milkRecords", JSON.stringify(existing));
+      totalDisplay.textContent = `Total Milk: ${totalLitres.toFixed(1)} L | Total Due: ₹${totalPrice.toFixed(2)}`;
+    }
 
-            let table = document.getElementById("recordTable");
-            let row = table.insertRow(-1);
-            row.insertCell(0).innerHTML = date;
-            row.insertCell(1).innerHTML = litre + " L";
-            row.insertCell(2).innerHTML = "₹" + price;
+    renderTable();
 
-            showPopup();
+    function addRecord() {
+      const date = document.getElementById("date").value;
+      const litres = document.getElementById("litres").value;
+      const price = document.getElementById("price").value;
 
-            document.getElementById("litre").value = "";
-            document.getElementById("price").value = "";
-        }
+      if (!date || !litres || !price) {
+        alert("Please fill in date, litres, and price!");
+        return;
+      }
 
-        function calculateTotal() {
-            let records = JSON.parse(localStorage.getItem("milkRecords")) || [];
-            let total = 0;
+      const newRecord = { name: customerName, date, litres, price };
+      records.push(newRecord);
+      allRecords[customerNumber] = records;
+      localStorage.setItem("milkRecords", JSON.stringify(allRecords));
 
-            records.forEach(r => {
-                total += parseFloat(r.price);
-            });
+      document.getElementById("date").value = "";
+      document.getElementById("litres").value = "";
+      document.getElementById("price").value = "";
 
-            alert("Total Pending Amount: ₹" + total);
-        }
+      renderTable();
+      showPopup(); // ✅ show success message
+    }
 
-        loadRecords();
-    </script>
+    function clearRecords() {
+      if (!confirm("Clear ALL records for this customer?")) return;
+      records = [];
+      allRecords[customerNumber] = [];
+      localStorage.setItem("milkRecords", JSON.stringify(allRecords));
+      renderTable();
+    }
+  </script>
 
 </body>
 </html>
+ 

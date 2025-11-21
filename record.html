@@ -1,87 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   <script>
-if (!localStorage.getItem("shopName")) {
-    window.location.href = "setup.html"; 
-}
-</script>
+    if (!localStorage.getItem("shopName")) {
+        window.location.href = "setup.html";
+    }
+  </script>
+
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ganesh Dairy - Milk Record</title>
+  <title>Milk Record</title>
+
   <style>
     * { margin:0; padding:0; box-sizing:border-box; font-family:"Poppins",sans-serif; }
     body {
       background: linear-gradient(135deg,#a8edea,#fed6e3);
       min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:22px;
     }
-    h1 { color:#2e8b57; margin-top:20px; margin-bottom:8px; animation:fadeDown 1.2s ease; }
+
+    /* Profile Bar */
+    .profile {
+      width: 95%;
+      background: #ffffffdd;
+      padding: 15px 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 18px rgba(0,0,0,0.15);
+      margin-bottom: 20px;
+      animation:fadeDown 1s ease;
+    }
+    .profile h2 {
+      margin-bottom: 6px;
+      color:#2e8b57;
+    }
+    .info-line {
+      font-size: 15px;
+      color: #333;
+      margin: 3px 0;
+    }
+
+    h1 { color:#2e8b57; margin-top:10px; margin-bottom:8px; }
     h3 { color:#444; margin-bottom:18px; }
+
     .form-section {
       background:rgba(255,255,255,0.92); padding:18px 24px; border-radius:12px;
       box-shadow:0 6px 18px rgba(0,0,0,0.08);
       text-align:center; width:380px; animation:fadeIn 1.4s ease;
     }
+
     input, button { padding:10px; margin:8px 6px; border-radius:8px; border:1px solid #2e8b57; font-size:15px; }
     input[type="date"] { width:150px; }
     input[type="number"] { width:100px; }
     button { background:#2e8b57; color:#fff; border:none; cursor:pointer; transition:0.2s; }
     button:hover { background:#256d46; transform:scale(1.02); }
-    table { width:95%; border-collapse:collapse; margin-top:34px; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.06); animation:fadeUp 1.2s ease; }
+
+    table { width:95%; border-collapse:collapse; margin-top:34px; background:#fff; border-radius:10px; overflow:hidden;
+      box-shadow:0 6px 18px rgba(0,0,0,0.06); animation:fadeUp 1.2s ease;
+    }
     th, td { padding:12px; text-align:center; border-bottom:1px solid #eee; }
     th { background:#2e8b57; color:#fff; }
     tr:hover { background:#fafafa; }
-    .back-btn { position:absolute; left:18px; top:18px; background:#256d46; color:#fff; padding:8px 12px; border-radius:8px; text-decoration:none; font-size:14px; transition:0.2s; }
+
+    .back-btn { position:absolute; left:18px; top:18px; background:#256d46; color:#fff; padding:8px 12px; border-radius:8px;
+      text-decoration:none; font-size:14px; transition:0.2s; }
     .back-btn:hover { background:#1f5538; }
+
     .total { margin-top:14px; font-weight:600; color:#2e8b57; text-align:center; }
 
-    /* Success popup styling */
     .popup {
       position: fixed;
-      top: 50%;
-      left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%) scale(0.9);
-      background: #2e8b57;
-      color: #fff;
-      padding: 16px 28px;
-      border-radius: 12px;
+      background: #2e8b57; color: #fff;
+      padding: 16px 28px; border-radius: 12px;
       box-shadow: 0 6px 18px rgba(0,0,0,0.3);
-      opacity: 0;
-      transition: all 0.4s ease;
-      z-index: 1000;
-      font-size: 16px;
-      text-align: center;
+      opacity: 0; transition: all 0.4s ease;
+      z-index: 999; font-size: 16px;
     }
-    .popup.show {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-    }
+    .popup.show { opacity:1; transform:translate(-50%,-50%) scale(1); }
 
     @keyframes fadeUp { from{opacity:0; transform:translateY(24px)} to{opacity:1; transform:translateY(0)} }
     @keyframes fadeDown { from{opacity:0; transform:translateY(-24px)} to{opacity:1; transform:translateY(0)} }
     @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-    @media (max-width:520px) { .form-section{width:95%} table{width:100%} input{width:80px} }
   </style>
 </head>
 <body>
 
-  <a href="page1.html" class="back-btn">⬅ Back</a>
+  <a href="index.html" class="back-btn">⬅ Back</a>
 
-  <h1>Ganesh Dairy 🥛</h1>
-  <h3 id="custInfo"></h3>
+  <!-- 🔥 PROFILE SECTION (NEW) -->
+  <div class="profile">
+    <h2 id="shopNameDisplay"></h2>
+    <div class="info-line" id="custNameDisplay"></div>
+    <div class="info-line" id="custNumberDisplay"></div>
+    <div class="info-line" id="totalSummaryDisplay">Total Milk: 0 L | Total Due: ₹0</div>
+  </div>
 
   <div class="form-section">
     <h3>Add Milk Record</h3>
+
     <div>
       <input type="date" id="date" required>
       <input type="number" id="litres" placeholder="Litres" min="0" step="0.1" required>
       <input type="number" id="price" placeholder="Price/Litre" min="0" step="0.1" required>
     </div>
+
     <div style="margin-top:6px;">
       <button onclick="addRecord()">Add Record</button>
       <button onclick="clearRecords()" style="background:#c0392b; margin-left:8px;">Clear All</button>
     </div>
-    <div class="total" id="totalDisplay"></div>
   </div>
 
   <table id="recordTable">
@@ -97,10 +124,10 @@ if (!localStorage.getItem("shopName")) {
     <tbody></tbody>
   </table>
 
-  <!-- Popup message -->
-  <div id="popup" class="popup">✅ Your record successfully added!</div>
+  <div id="popup" class="popup">✅ Record added successfully!</div>
 
   <script>
+    const shopName = localStorage.getItem("shopName");
     const customerName = localStorage.getItem("customerName");
     const customerNumber = localStorage.getItem("customerNumber");
 
@@ -109,14 +136,17 @@ if (!localStorage.getItem("shopName")) {
       window.location.href = "index.html";
     }
 
-    document.getElementById("custInfo").textContent = `Customer: ${customerName} (No: ${customerNumber})`;
+    // Set profile data
+    document.getElementById("shopNameDisplay").textContent = shopName;
+    document.getElementById("custNameDisplay").textContent = "Customer: " + customerName;
+    document.getElementById("custNumberDisplay").textContent = "Number: " + customerNumber;
 
     let allRecords = JSON.parse(localStorage.getItem("milkRecords") || "{}");
     let records = allRecords[customerNumber] || [];
 
     const tableBody = document.querySelector("#recordTable tbody");
-    const totalDisplay = document.getElementById("totalDisplay");
     const popup = document.getElementById("popup");
+    const totalSummaryDisplay = document.getElementById("totalSummaryDisplay");
 
     function showPopup() {
       popup.classList.add("show");
@@ -127,7 +157,7 @@ if (!localStorage.getItem("shopName")) {
       tableBody.innerHTML = "";
       if (records.length === 0) {
         tableBody.innerHTML = "<tr><td colspan='5'>No records yet</td></tr>";
-        totalDisplay.textContent = "Total Milk: 0 L | Total Due: ₹0";
+        totalSummaryDisplay.textContent = "Total Milk: 0 L | Total Due: ₹0";
         return;
       }
 
@@ -136,7 +166,8 @@ if (!localStorage.getItem("shopName")) {
 
       records.forEach(r => {
         const tr = document.createElement("tr");
-        const recordTotal = parseFloat(r.litres) * parseFloat(r.price);
+        const recordTotal = (parseFloat(r.litres) * parseFloat(r.price));
+
         tr.innerHTML = `
           <td>${r.name}</td>
           <td>${r.date}</td>
@@ -145,11 +176,14 @@ if (!localStorage.getItem("shopName")) {
           <td>₹${recordTotal.toFixed(2)}</td>
         `;
         tableBody.appendChild(tr);
+
         totalLitres += parseFloat(r.litres) || 0;
         totalPrice += recordTotal || 0;
       });
 
-      totalDisplay.textContent = `Total Milk: ${totalLitres.toFixed(1)} L | Total Due: ₹${totalPrice.toFixed(2)}`;
+      // Update profile bar summary
+      totalSummaryDisplay.textContent =
+        `Total Milk: ${totalLitres.toFixed(1)} L | Total Due: ₹${totalPrice.toFixed(2)}`;
     }
 
     renderTable();
@@ -160,7 +194,7 @@ if (!localStorage.getItem("shopName")) {
       const price = document.getElementById("price").value;
 
       if (!date || !litres || !price) {
-        alert("Please fill in date, litres, and price!");
+        alert("Please fill all fields!");
         return;
       }
 
@@ -174,7 +208,7 @@ if (!localStorage.getItem("shopName")) {
       document.getElementById("price").value = "";
 
       renderTable();
-      showPopup(); // ✅ show success message
+      showPopup();
     }
 
     function clearRecords() {
@@ -188,5 +222,3 @@ if (!localStorage.getItem("shopName")) {
 
 </body>
 </html>
-
-

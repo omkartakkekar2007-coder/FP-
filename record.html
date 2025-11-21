@@ -19,7 +19,51 @@
       min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:22px;
     }
 
-    /* Profile Bar */
+    /* 🔥 New TOP-RIGHT Profile Circle */
+    .profile-circle {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      width: 45px;
+      height: 45px;
+      background: #2e8b57;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    /* Profile Popup */
+    .profile-popup {
+      position: absolute;
+      top: 70px;
+      right: 15px;
+      width: 200px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    .profile-popup p { margin: 6px 0; font-size: 15px; }
+    .logout-btn {
+      background: #c0392b;
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    /* Profile Bar Already in your file */
     .profile {
       width: 95%;
       background: #ffffffdd;
@@ -88,7 +132,17 @@
 
   <a href="index.html" class="back-btn">⬅ Back</a>
 
-  <!-- 🔥 PROFILE SECTION (NEW) -->
+  <!-- 🔥 TOP-RIGHT PROFILE CIRCLE -->
+  <div class="profile-circle" id="profileCircle">👤</div>
+
+  <!-- 🔥 Popup (Hidden by default) -->
+  <div class="profile-popup" id="profilePopup">
+    <p id="popupName"></p>
+    <p id="popupNumber"></p>
+    <div class="logout-btn" onclick="logout()">Logout</div>
+  </div>
+
+  <!-- Existing Profile Box -->
   <div class="profile">
     <h2 id="shopNameDisplay"></h2>
     <div class="info-line" id="custNameDisplay"></div>
@@ -136,10 +190,30 @@
       window.location.href = "index.html";
     }
 
-    // Set profile data
+    // Set profile bar values
     document.getElementById("shopNameDisplay").textContent = shopName;
     document.getElementById("custNameDisplay").textContent = "Customer: " + customerName;
     document.getElementById("custNumberDisplay").textContent = "Number: " + customerNumber;
+
+    // Set popup values
+    document.getElementById("popupName").textContent = "Name: " + customerName;
+    document.getElementById("popupNumber").textContent = "Number: " + customerNumber;
+
+    // Toggle popup on circle click
+    const profileCircle = document.getElementById("profileCircle");
+    const profilePopup = document.getElementById("profilePopup");
+
+    profileCircle.onclick = () => {
+      profilePopup.style.display =
+        profilePopup.style.display === "block" ? "none" : "block";
+    };
+
+    // Logout
+    function logout() {
+      localStorage.removeItem("customerName");
+      localStorage.removeItem("customerNumber");
+      window.location.href = "index.html";
+    }
 
     let allRecords = JSON.parse(localStorage.getItem("milkRecords") || "{}");
     let records = allRecords[customerNumber] || [];
@@ -181,7 +255,6 @@
         totalPrice += recordTotal || 0;
       });
 
-      // Update profile bar summary
       totalSummaryDisplay.textContent =
         `Total Milk: ${totalLitres.toFixed(1)} L | Total Due: ₹${totalPrice.toFixed(2)}`;
     }

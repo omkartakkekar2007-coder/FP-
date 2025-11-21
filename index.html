@@ -60,4 +60,50 @@
       font-size:14px;
       margin-top:10px;
       display:none;
-      animation:fadeIn 0.3s
+      animation:fadeIn 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1 id="shopTitle">🐄 Ganesh Dairy 🥛</h1>
+    <h3>Fresh • Pure • Local Milk Everyday</h3>
+  </div>
+
+  <script>
+    // Replace title with shop name
+    const shopName = localStorage.getItem("shopName");
+    if (shopName) {
+      document.getElementById("shopTitle").innerText = shopName;
+    }
+  </script>
+
+  <div class="login-section">
+    <input type="text" id="custName" placeholder="Enter Customer Name" required><br>
+    <input type="text" id="custNumber" placeholder="Enter Customer Number" required><br>
+    <button onclick="goToNext()">Login</button>
+    <div class="error" id="errorMsg">⚠️ Please enter both Name and Customer Number!</div>
+  </div>
+
+  <script>
+    function goToNext() {
+      const name = document.getElementById("custName").value.trim();
+      const number = document.getElementById("custNumber").value.trim();
+      const errorMsg = document.getElementById("errorMsg");
+
+      if (name === "" || number === "") {
+        errorMsg.style.display = "block";
+        return;
+      }
+      errorMsg.style.display = "none";
+
+      localStorage.setItem("customerName", name);
+      localStorage.setItem("customerNumber", number);
+
+      window.location.href = "record.html";
+    }
+  </script>
+
+</body>
+</html>

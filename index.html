@@ -2,18 +2,18 @@
 <html lang="en">
 <head>
 
-<script>
-// If shop name not set → go to setup page
-if (!localStorage.getItem("shopName")) {
-    window.location.href = "setup.html"; 
-}
-</script>
+  <!-- Redirect to setup page if shop name is not saved -->
+  <script>
+    if (!localStorage.getItem("shopName")) {
+        window.location.href = "setup.html"; 
+    }
+  </script>
 
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Ganesh Dairy - Customer Login</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ganesh Dairy - Customer Login</title>
 
-<style>
+  <style>
     * { margin:0; padding:0; box-sizing:border-box; font-family:"Poppins",sans-serif; }
     body {
       height:100vh;
@@ -24,7 +24,6 @@ if (!localStorage.getItem("shopName")) {
     .header { text-align:center; animation:fadeDown 1.2s ease; }
     .header h1 { font-size:54px; color:#1e7b38; letter-spacing:2px; margin-bottom:8px; }
     .header h3 { color:#333; font-weight:500; font-size:18px; margin-bottom:24px; }
-
     .login-section {
       background:rgba(255,255,255,0.92);
       padding:30px 36px;
@@ -33,7 +32,6 @@ if (!localStorage.getItem("shopName")) {
       text-align:center;
       animation:fadeUp 1s ease;
     }
-
     input {
       padding:12px 18px;
       width:280px;
@@ -45,7 +43,6 @@ if (!localStorage.getItem("shopName")) {
       margin-bottom:12px;
     }
     input:focus { box-shadow:0 0 10px rgba(30,123,56,0.4); transform:scale(1.02); }
-
     button {
       margin-top:8px;
       padding:12px 40px;
@@ -58,68 +55,9 @@ if (!localStorage.getItem("shopName")) {
       transition:0.25s;
     }
     button:hover { background:#17642e; transform:scale(1.03); }
-
     .error {
       color:#b3261e;
       font-size:14px;
       margin-top:10px;
       display:none;
-      animation:fadeIn 0.3s ease;
-    }
-
-    footer { position:absolute; bottom:14px; font-size:13px; color:#333; animation:fadeIn 1.6s ease; }
-
-    @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
-    @keyframes fadeDown { from{opacity:0;transform:translateY(-30px)} to{opacity:1;transform:translateY(0)} }
-    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-</style>
-</head>
-
-<body>
-
-  <div class="header">
-    <!-- ⭐ Shop name will load here instead of 'Ganesh Dairy' -->
-    <h1 id="shopTitle">🐄 Ganesh Dairy 🥛</h1>
-
-    <h3>Fresh • Pure • Local Milk Everyday</h3>
-  </div>
-
-  <div class="login-section">
-    <input type="text" id="custName" placeholder="Enter Customer Name" required><br>
-    <input type="text" id="custNumber" placeholder="Enter Customer Number" required><br>
-    <button onclick="goToNext()">Login</button>
-    <div class="error" id="errorMsg">⚠️ Please enter both Name and Customer Number!</div>
-  </div>
-
-  <footer>© 2025 Ganesh Dairy. All Rights Reserved.</footer>
-
-
-<script>
-
-//// ⭐ Load Shop Name from localStorage
-document.getElementById("shopTitle").innerText = "🐄 " + localStorage.getItem("shopName") + " 🥛";
-
-
-// ⭐ Customer login function
-function goToNext() {
-    const name = document.getElementById("custName").value.trim();
-    const number = document.getElementById("custNumber").value.trim();
-    const errorMsg = document.getElementById("errorMsg");
-
-    if (name === "" || number === "") {
-        errorMsg.style.display = "block";
-        return;
-    }
-    errorMsg.style.display = "none";
-
-    // Save customer details (used to show profile later)
-    localStorage.setItem("customerName", name);
-    localStorage.setItem("customerNumber", number);
-
-    window.location.href = "record.html";
-}
-
-</script>
-
-</body>
-</html>
+      animation:fadeIn 0.3s

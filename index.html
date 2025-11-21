@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 
-  <!-- Redirect to setup page if shop name is not saved -->
+  <!-- Redirect to setup page if shop name missing -->
   <script>
     if (!localStorage.getItem("shopName")) {
         window.location.href = "setup.html"; 
@@ -11,7 +11,7 @@
 
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ganesh Dairy - Customer Login</title>
+  <title>Customer Login</title>
 
   <style>
     * { margin:0; padding:0; box-sizing:border-box; font-family:"Poppins",sans-serif; }
@@ -60,4 +60,50 @@
       font-size:14px;
       margin-top:10px;
       display:none;
-      animation:fadeIn 0.3s
+      animation:fadeIn 0.3s ease;
+    }
+    footer { position:absolute; bottom:14px; font-size:13px; color:#333; animation:fadeIn 1.6s ease; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1 id="shopTitle">Loading...</h1>
+    <h3>Fresh • Pure • Local Milk Everyday</h3>
+  </div>
+
+  <div class="login-section">
+    <input type="text" id="custName" placeholder="Enter Customer Name" required><br>
+    <input type="text" id="custNumber" placeholder="Enter Customer Number" required><br>
+    <button onclick="goToNext()">Login</button>
+    <div class="error" id="errorMsg">⚠️ Please enter both Name and Customer Number!</div>
+  </div>
+
+  <footer>© 2025 Ganesh Dairy. All Rights Reserved.</footer>
+
+  <script>
+    // Load dynamic shop name
+    document.getElementById("shopTitle").textContent = localStorage.getItem("shopName");
+
+    function goToNext() {
+      const name = document.getElementById("custName").value.trim();
+      const number = document.getElementById("custNumber").value.trim();
+      const errorMsg = document.getElementById("errorMsg");
+
+      if (name === "" || number === "") {
+        errorMsg.style.display = "block";
+        return;
+      }
+      errorMsg.style.display = "none";
+
+      // Save login info
+      localStorage.setItem("customerName", name);
+      localStorage.setItem("customerNumber", number);
+
+      // Redirect
+      window.location.href = "record.html";
+    }
+  </script>
+
+</body>
+</html>

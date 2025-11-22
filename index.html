@@ -3,141 +3,76 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-
 <title>Bhairavnath Dairy – Customer Login</title>
-
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; font-family:"Poppins",sans-serif; }
-
-  body {
-    background: linear-gradient(135deg,#a8edea,#fed6e3);
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    animation:fadeBody 1s ease;
-  }
-
-  h1 {
-    color:#1e7b38;
-    margin-bottom:10px;
-    font-size:42px;
-    animation:fadeDown 1s ease forwards;
-    opacity:0;
-  }
-
-  h3 {
-    color:#444;
-    margin-bottom:20px;
-    animation:fadeDown 1.2s ease forwards;
-    opacity:0;
-  }
-
-  .login-box {
-    background:rgba(255,255,255,0.95);
-    padding:26px 32px;
-    border-radius:14px;
-    box-shadow:0 6px 20px rgba(0,0,0,0.08);
-    text-align:center;
-    width:320px;
-    animation:fadeUp 1s ease forwards;
-    opacity:0;
-  }
-
-  input {
-    width:100%;
-    padding:12px;
-    margin:10px 0;
-    border-radius:10px;
-    border:2px solid #1e7b38;
-    outline:none;
-    font-size:15px;
-    transition:0.25s;
-  }
-
-  input:focus {
-    box-shadow:0 0 12px rgba(0,0,0,0.18);
-    transform:scale(1.03);
-  }
-
-  button {
-    padding:12px 26px;
-    margin-top:10px;
-    background:#1e7b38;
-    color:#fff;
-    border:none;
-    border-radius:10px;
-    font-size:16px;
-    cursor:pointer;
-    transition:0.25s;
-  }
-
-  button:hover { 
-    background:#145526; 
-    transform:scale(1.05);
-  }
-
-  .error {
-    color:#c62828;
-    font-size:14px;
-    margin-top:10px;
-    display:none;
-  }
-
-  @keyframes fadeDown {
-    0% { opacity:0; transform:translateY(-30px); }
-    100% { opacity:1; transform:translateY(0); }
-  }
-
-  @keyframes fadeUp {
-    0% { opacity:0; transform:translateY(40px); }
-    100% { opacity:1; transform:translateY(0); }
-  }
-
-  @keyframes fadeBody {
-    0% { opacity:0; }
-    100% { opacity:1; }
-  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:Poppins, sans-serif}
+  body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#a8edea,#fed6e3);padding:20px}
+  .card{width:340px;background:rgba(255,255,255,0.98);padding:28px;border-radius:12px;box-shadow:0 8px 26px rgba(0,0,0,0.08);text-align:center}
+  h1{color:#1e7b38;margin-bottom:6px;font-size:26px}
+  p{color:#444;margin-bottom:14px}
+  input{width:100%;padding:12px;border:2px solid #1e7b38;border-radius:10px;margin-bottom:10px;font-size:15px;outline:none}
+  input:focus{box-shadow:0 0 10px rgba(30,123,56,0.12);transform:scale(1.02)}
+  button{width:100%;padding:12px;border-radius:10px;border:none;background:#1e7b38;color:#fff;font-weight:700;cursor:pointer}
+  .error{color:#c62828;margin-top:8px;display:none}
+  .muted{font-size:13px;color:#666;margin-top:8px}
 </style>
 </head>
-
 <body>
+  <div class="card">
+    <h1>🐄 Bhairavnath Dairy</h1>
+    <p>Customer Login</p>
 
-  <h1>🐄 Bhairavnath Dairy 🥛</h1>
-  <h3>Customer Login</h3>
-
-  <div class="login-box">
-    <input type="text" id="custName" placeholder="Enter Customer Name" />
-    <input type="text" id="custNumber" placeholder="Enter Customer Number" />
-
-    <button onclick="login()">Login</button>
-
-    <div class="error" id="errorMsg">⚠️ Please enter both fields!</div>
+    <input id="custName" type="text" placeholder="Customer name" />
+    <input id="custNumber" type="text" placeholder="Customer number" />
+    <button id="loginBtn">Login</button>
+    <div class="error" id="err">⚠️ Enter both name and number</div>
+    <div class="muted">Files must be at repository root for GitHub Pages to work.</div>
   </div>
 
 <script>
-function login() {
-  const name = document.getElementById("custName").value.trim();
-  const number = document.getElementById("custNumber").value.trim();
-  const error = document.getElementById("errorMsg");
+  // ensure script runs after DOM (placed at end)
+  (function(){
+    console.log("index.html loaded");
+    const nameEl = document.getElementById('custName');
+    const numEl  = document.getElementById('custNumber');
+    const err    = document.getElementById('err');
+    const btn    = document.getElementById('loginBtn');
 
-  if (name === "" || number === "") {
-    error.style.display = "block";
-    return;
-  }
+    btn.addEventListener('click', function(){
+      try {
+        const name = nameEl.value.trim();
+        const num  = numEl.value.trim();
+        console.log("login attempt:", {name, num});
 
-  error.style.display = "none";
+        if(!name || !num){
+          err.style.display = 'block';
+          return;
+        }
+        err.style.display = 'none';
 
-  // save customer info
-  localStorage.setItem("customerName", name);
-  localStorage.setItem("customerNumber", number);
+        localStorage.setItem('customerName', name);
+        localStorage.setItem('customerNumber', num);
 
-  // redirect (GitHub safe)
-  window.location.href = "./record.html";
-}
+        // extra debug
+        console.log("Saved to localStorage. Redirecting to ./record.html");
+        window.location.href = './record.html';
+      } catch (e) {
+        console.error("Login error:", e);
+        alert("An error occurred (see console).");
+      }
+    });
+
+    // helpful: prefill fields if customer data already exists
+    try {
+      const savedName = localStorage.getItem('customerName');
+      const savedNum  = localStorage.getItem('customerNumber');
+      if(savedName) nameEl.value = savedName;
+      if(savedNum)  numEl.value = savedNum;
+    } catch(e) {
+      console.warn("Could not read localStorage:", e);
+    }
+
+  })();
 </script>
-
 </body>
 </html>

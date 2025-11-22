@@ -7,17 +7,19 @@
 <title>Bhairavnath Dairy – Customer Login</title>
 
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; font-family:"Inter", sans-serif; } /* Changed font to Inter for consistency */
+  * { margin:0; padding:0; box-sizing:border-box; font-family:"Inter", sans-serif; } 
 
   body {
-    background: linear-gradient(135deg,#a8edea,#fed6e3);
+    /* Updated background for smoother, animated gradient */
+    background: linear-gradient(135deg, #a8edea, #fed6e3);
+    background-size: 200% 200%; /* For animating the gradient */
     min-height:100vh;
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
     padding:20px;
-    animation:fadeBody 1s ease;
+    animation: fadeBody 1s ease forwards, colorShift 15s ease infinite alternate; /* Added colorShift */
   }
 
   h1 {
@@ -41,12 +43,13 @@
     background:rgba(255,255,255,0.95);
     padding:26px 32px;
     border-radius:14px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.15); /* Slightly stronger shadow */
+    box-shadow:0 10px 30px rgba(0,0,0,0.15); 
     text-align:center;
     width:320px;
     max-width: 90%;
     animation:fadeUp 1s ease forwards;
     opacity:0;
+    animation-delay: 0.3s; /* Delay for smoother sequence */
   }
 
   input {
@@ -57,17 +60,24 @@
     border:2px solid #1e7b38;
     outline:none;
     font-size:15px;
-    transition:0.25s;
+    transition:0.3s ease-in-out; /* Slightly longer transition */
+    opacity: 0;
+    transform: translateX(-10px);
+    animation: inputSlideIn 0.5s ease forwards;
   }
+  
+  /* Individual input animation delays */
+  #custName { animation-delay: 1.2s; }
+  #custNumber { animation-delay: 1.4s; }
 
   input:focus {
-    box-shadow:0 0 12px rgba(30, 123, 56, 0.4); /* Green shadow on focus */
-    transform:scale(1.03);
+    box-shadow:0 0 12px rgba(30, 123, 56, 0.4); 
+    transform:scale(1.01); /* Reduced scale for a subtler effect */
   }
 
   button {
     padding:12px 26px;
-    margin-top:10px;
+    margin-top:20px; /* Increased margin for better spacing */
     background:#1e7b38;
     color:#fff;
     border:none;
@@ -75,13 +85,17 @@
     font-size:16px;
     font-weight: 600;
     cursor:pointer;
-    transition:0.25s;
+    transition:0.3s ease; /* Updated transition for smoothness */
     box-shadow:0 4px 10px rgba(30, 123, 56, 0.3);
+    opacity: 0;
+    transform: scale(0.9);
+    animation: buttonPop 0.5s ease forwards;
+    animation-delay: 1.6s; /* Delayed to appear after inputs */
   }
 
   button:hover { 
     background:#145526; 
-    transform:scale(1.03);
+    transform:scale(1.05); /* Increased hover scale */
     box-shadow:0 6px 15px rgba(30, 123, 56, 0.4);
   }
 
@@ -91,6 +105,7 @@
     margin-top:10px;
     display:none;
     font-weight: 500;
+    transition: opacity 0.3s;
   }
 
   /* Loading Indicator Style */
@@ -110,6 +125,23 @@
     40% { color: #1e7b38; text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); }
     60% { text-shadow: .25em 0 0 #1e7b38, .5em 0 0 rgba(0,0,0,0); }
     80%, 100% { text-shadow: .25em 0 0 #1e7b38, .5em 0 0 #1e7b38; }
+  }
+
+  /* New animation for a subtle background color shift */
+  @keyframes colorShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* New animation for inputs sliding in */
+  @keyframes inputSlideIn {
+    100% { opacity: 1; transform: translateX(0); }
+  }
+
+  /* New animation for button popping in */
+  @keyframes buttonPop {
+    100% { opacity: 1; transform: scale(1); }
   }
 
   @keyframes fadeDown {

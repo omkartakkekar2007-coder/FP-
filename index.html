@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 
-<title>Ganesh Dairy – Shop Setup</title>
+<title>Bhairavnath Dairy – Shop Setup</title>
 
 <style>
   * { margin:0; padding:0; box-sizing:border-box; font-family:"Poppins",sans-serif; }
@@ -17,19 +17,22 @@
     align-items:center;
     justify-content:center;
     padding:20px;
+    animation:fadeBody 1.2s ease;
   }
 
   h1 {
     color:#1e7b38;
     margin-bottom:10px;
     font-size:42px;
-    animation:fadeDown 1s ease;
+    animation:fadeDown 1s ease forwards;
+    opacity:0;
   }
 
   h3 {
     color:#444;
     margin-bottom:20px;
-    animation:fadeDown 1.2s ease;
+    animation:fadeDown 1.3s ease forwards;
+    opacity:0;
   }
 
   .setup-box {
@@ -39,7 +42,8 @@
     box-shadow:0 6px 20px rgba(0,0,0,0.08);
     text-align:center;
     width:320px;
-    animation:fadeUp 1s ease;
+    animation:fadeUp 1.2s ease forwards;
+    opacity:0;
   }
 
   input {
@@ -54,8 +58,8 @@
   }
 
   input:focus {
-    box-shadow:0 0 10px rgba(0,0,0,0.15);
-    transform:scale(1.02);
+    box-shadow:0 0 12px rgba(0,0,0,0.15);
+    transform:scale(1.03);
   }
 
   button {
@@ -70,20 +74,48 @@
     transition:0.25s;
   }
 
-  button:hover { background:#145526; transform:scale(1.03); }
+  button:hover { 
+    background:#145526; 
+    transform:scale(1.05);
+  }
 
   .error {
     color:#c62828;
     font-size:14px;
     margin-top:10px;
     display:none;
+    animation:fadeIn 0.4s ease;
   }
+
+
+  /* ----------------------- ANIMATIONS ----------------------- */
+
+  @keyframes fadeDown {
+    0% { opacity:0; transform:translateY(-30px); }
+    100% { opacity:1; transform:translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    0% { opacity:0; transform:translateY(40px); }
+    100% { opacity:1; transform:translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    0% { opacity:0; }
+    100% { opacity:1; }
+  }
+
+  @keyframes fadeBody {
+    0% { opacity:0; }
+    100% { opacity:1; }
+  }
+
 </style>
 </head>
 
 <body>
 
-  <h1>🐄 Ganesh Dairy 🥛</h1>
+  <h1>🐄 Bhairavnath Dairy 🥛</h1>
   <h3>Shop Registration</h3>
 
   <div class="setup-box">
@@ -111,13 +143,13 @@ function saveShop() {
 
   error.style.display = "none";
 
-  // save
+  // save data
   localStorage.setItem("shopName", shopName);
   localStorage.setItem("ownerName", owner);
   localStorage.setItem("shopNumber", number);
 
-  // redirect → customer login page
-  window.location.href = "index.html";
+  // redirect (GitHub-safe)
+  window.location.href = "./index.html";
 }
 </script>
 
